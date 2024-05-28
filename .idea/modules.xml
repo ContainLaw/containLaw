@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/containLaw.main.iml" filepath="$PROJECT_DIR$/.idea/modules/containLaw.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/containLaw.iml" filepath="$PROJECT_DIR$/containLaw.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/containLaw.test.iml" filepath="$PROJECT_DIR$/.idea/modules/containLaw.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/org.kangnam.containLaw.main.iml" filepath="$PROJECT_DIR$/.idea/modules/org.kangnam.containLaw.main.iml" />
     </modules>
   </component>
 </project>
