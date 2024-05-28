@@ -1,4 +1,4 @@
-package org.kangnam.containlaw.api.NsmLeg.response;
+package org.kangnam.containlaw.api.NsmLeg;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;

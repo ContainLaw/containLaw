@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class MemberProfileService {
+public class MemberProfileService implements iMemberProfileService{
 
     @Autowired
     private MemberProfileRepository memberProfileRepository;
