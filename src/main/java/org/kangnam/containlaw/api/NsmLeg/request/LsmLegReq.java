@@ -1,9 +1,12 @@
-package org.kangnam.containlaw.api.NsmLeg;
+package org.kangnam.containlaw.api.NsmLeg.request;
 
 import lombok.Setter;
 
 @Setter
 public class LsmLegReq {
+    String Type;
+    String pIndex;
+    String pSize;
     String BILL_ID = "";
     String BILL_NO = "";
     String AGE = "";
@@ -15,9 +18,19 @@ public class LsmLegReq {
     String PROC_RESULT_CD = "";
     String PROC_DT = "";
 
+    public LsmLegReq() {
+        this.Type="xml";
+        this.pIndex="1";
+        this.pSize="20";
+        this.AGE="21";
+    }
+
     @Override
     public String toString() {
-        return  "&BILL_ID=" + BILL_ID +
+        return  "&Type=" + Type +
+                "&pIndex=" + pIndex +
+                "&pSize=" + pSize +
+                "&BILL_ID=" + BILL_ID +
                 "&BILL_NO=" + BILL_NO +
                 "&AGE=" + AGE +
                 "&BILL_NAMESTRING=" + BILL_NAMESTRING +
