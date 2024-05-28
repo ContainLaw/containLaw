@@ -33,6 +33,20 @@ public class MemberProfileService implements iMemberProfileService {
                 .collect(Collectors.toList());
     }
 
+    public List<MemberProfileDto> searchByPartyName(String partyName){
+        return memberProfileRepository.findByPartyNameContaining(partyName)
+                .stream()
+                .map(MemberProfile::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<MemberProfileDto> searchByDistrict(String district){
+        return memberProfileRepository.findByDistrictContaining(district)
+                .stream()
+                .map(MemberProfile::toDto)
+                .collect(Collectors.toList());
+    }
+
     public MemberProfileDto saveMemberProfile(MemberProfileDto memberProfileDto) {
         MemberProfile memberProfile = MemberProfile.fromDto(memberProfileDto);
         MemberProfile savedProfile = memberProfileRepository.save(memberProfile);

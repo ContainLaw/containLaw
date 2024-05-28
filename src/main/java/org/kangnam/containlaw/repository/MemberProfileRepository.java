@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface MemberProfileRepository extends JpaRepository<MemberProfile, Long> {
     List<MemberProfile> findByNameContaining(String name);
+    List<MemberProfile> findByPartyNameContaining (String partyName);
+    List<MemberProfile> findByDistrictContaining (String district);
 }
