@@ -1,13 +1,14 @@
-package org.kangnam.containlaw.service;
+package org.kangnam.containlaw.api.NsmLeg;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.kangnam.containlaw.api.NsmLeg.Proposer;
-import org.kangnam.containlaw.api.NsmLeg.LsmLegReq;
-import org.kangnam.containlaw.api.NsmLeg.LsmLegRes;
+import org.kangnam.containlaw.api.NsmLeg.request.LsmLegReq;
+import org.kangnam.containlaw.api.NsmLeg.response.LsmLegRes;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,7 +20,7 @@ import java.util.Objects;
 
 @Service
 @PropertySource("classpath:config.properties")
-public class LsmLegAPIService implements iLsmLegAPIService{
+public class LsmLegAPIService {
 //    @Value("${LSM_LM_API_KEY}")
     private String KEY;
     private final RestTemplate restTemplate;
@@ -109,13 +110,13 @@ public class LsmLegAPIService implements iLsmLegAPIService{
             return "";
         }
     }
-    public String makeLsmLegHeaderReqUrl(LsmLegReq lsmLegReq) {
+    private String makeLsmLegHeaderReqUrl(LsmLegReq lsmLegReq) {
         return "https://open.assembly.go.kr/portal/openapi/TVBPMBILL11?Key=" + KEY + lsmLegReq;
     }
-    public String makeLsmLegProposerReqUrl(LsmLegRes.LsmLeg row) {
+    private String makeLsmLegProposerReqUrl(LsmLegRes.LsmLeg row) {
         return "https://likms.assembly.go.kr/bill/coactorListPopup.do?billId=" + row.getBillId();
     }
-    public String createLsmLegContentUrl(String BILL_ID) {
+    private String createLsmLegContentUrl(String BILL_ID) {
         return "https://likms.assembly.go.kr/bill/billDetail.do?billId=" + BILL_ID;
     }
 }

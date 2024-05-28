@@ -1,12 +1,12 @@
-package org.kangnam.containlaw.service;
+package org.kangnam.containlaw.api.GovLeg;
 
 
-import org.kangnam.containlaw.api.GovLeg.GovLegReq;
-import org.kangnam.containlaw.api.GovLeg.GovLegStatReqParmMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,23 +14,22 @@ import java.time.LocalDateTime;
 
 @Service
 @PropertySource("classpath:config.properties")
-public class GovLegAPIService implements iGovLegAPIService { // Government Legislative Status Service
+public class GovLegService { // Government Legislative Status Service
 
-    private static final Logger logger = LoggerFactory.getLogger(GovLegAPIService.class);
+    private static final Logger logger = LoggerFactory.getLogger(GovLegService.class);
 
 //    @Value("${GOV_LM_API_KEY}")
     private String OC;
 
     public final RestTemplate restTemplate;
 
-    public GovLegAPIService(RestTemplate restTemplate) {
+    public GovLegService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
 
 //    @Scheduled(fixedRate = 3000)
 //    @Scheduled(cron="0 0 18 * * *")
-    @Override
     public void autoGetGovLegState() {
         GovLegReq govLegReq = new GovLegReq();
 //        govLegReq.setLsKndCd(GovLegStatReqParmMapper.getLsKndCode("교육부"));
@@ -50,10 +49,7 @@ public class GovLegAPIService implements iGovLegAPIService { // Government Legis
         }
     }
 
-
-
-    @Override
-    public String makeGovLegStatReqUrl(GovLegReq govLegReq) {
+    private String makeGovLegStatReqUrl(GovLegReq govLegReq) {
         return "http://www.lawmaking.go.kr/rest/govLmSts.xml?OC=" + OC + govLegReq;
     }
 }
