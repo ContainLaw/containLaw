@@ -1,7 +1,8 @@
 package org.kangnam.containlaw.utils;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Unmarshaller;
+
 import java.io.StringReader;
 
 public class DataTypeConverter {

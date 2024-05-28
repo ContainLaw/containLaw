@@ -1,7 +1,10 @@
 package org.kangnam.containlaw.api.NsmLeg.response;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
-import javax.xml.bind.annotation.*;
 import java.util.List;
 
 @Data

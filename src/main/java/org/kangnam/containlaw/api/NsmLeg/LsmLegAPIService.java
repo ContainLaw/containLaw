@@ -21,14 +21,14 @@ import java.util.Objects;
 @Service
 @PropertySource("classpath:config.properties")
 public class LsmLegAPIService {
-    @Value("${LSM_LM_API_KEY}")
+//    @Value("${LSM_LM_API_KEY}")
     private String KEY;
     private final RestTemplate restTemplate;
     public LsmLegAPIService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 //    @Scheduled(cron = "0 0 18 * * *")
-    @Scheduled(fixedRate = 100000)
+//    @Scheduled(fixedRate = 100000)
     private void autoGetLsmLegState() {
         LsmLegReq lsmLegReq = new LsmLegReq();
         List<Proposer> proposerList;
