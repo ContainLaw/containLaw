@@ -18,7 +18,7 @@ public class GovLegService { // Government Legislative Status Service
 
     private static final Logger logger = LoggerFactory.getLogger(GovLegService.class);
 
-    @Value("${GOV_LM_API_KEY}")
+//    @Value("${GOV_LM_API_KEY}")
     private String OC;
 
     public final RestTemplate restTemplate;
@@ -29,7 +29,7 @@ public class GovLegService { // Government Legislative Status Service
 
 
 //    @Scheduled(fixedRate = 3000)
-    @Scheduled(cron="0 0 18 * * *")
+//    @Scheduled(cron="0 0 18 * * *")
     public void autoGetGovLegState() {
         GovLegReq govLegReq = new GovLegReq();
 //        govLegReq.setLsKndCd(GovLegStatReqParmMapper.getLsKndCode("교육부"));

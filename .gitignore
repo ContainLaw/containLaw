@@ -55,6 +55,7 @@ cmake-build-*/
 
 # IntelliJ
 out/
+config.properties
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
@@ -194,5 +195,7 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,gradle,java,intellij
+
+config.properties
 
 config.properties
