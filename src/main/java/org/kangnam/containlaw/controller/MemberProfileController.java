@@ -30,9 +30,23 @@ public class MemberProfileController implements iMemberProfileController{
         return "home";
     }
 
-    @GetMapping("/search")
+    @GetMapping("/searchByName")
     public String searchMemberProfiles(@RequestParam String name, Model model) {
         List<MemberProfileDto> profiles = memberProfileService.searchByName(name);
+        model.addAttribute("profiles", profiles);
+        return "search";
+    }
+
+    @GetMapping("/searchByPartyName")
+    public String searchPartyNameProfiles(@RequestParam String partyName, Model model) {
+        List<MemberProfileDto> profiles = memberProfileService.searchByName(partyName);
+        model.addAttribute("profiles", profiles);
+        return "search";
+    }
+
+    @GetMapping("/searchByDistrict")
+    public String searchDistrictProfiles(@RequestParam String district, Model model) {
+        List<MemberProfileDto> profiles = memberProfileService.searchByName(district);
         model.addAttribute("profiles", profiles);
         return "search";
     }
