@@ -5,13 +5,16 @@ import org.kangnam.containlaw.entity.MemberProfile;
 import org.kangnam.containlaw.repository.MemberProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class MemberProfileService implements iMemberProfileService{
+public class MemberProfileService implements iMemberProfileService {
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Autowired
     private MemberProfileRepository memberProfileRepository;
@@ -46,5 +49,20 @@ public class MemberProfileService implements iMemberProfileService{
         } else {
             return null;
         }
+    }
+
+//    @Override
+    public void getProfileImg(String name) {
+        String url = createProfileImgPath(name);
+        String jsonData = restTemplate.getForObject(url, String.class);
+        System.out.println(jsonData);
+
+        /*
+        윤영이가 이미지를 DB에 저장
+        */
+    }
+    public String createProfileImgPath(String name) {
+        return "https://open.assembly.go.kr/portal/assm/search/searchAssmMemberSch.do?unitCd=100021&gubunId=MA&schHgNm="
+                + name;
     }
 }

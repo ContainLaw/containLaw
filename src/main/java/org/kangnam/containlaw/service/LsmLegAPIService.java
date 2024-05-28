@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-@PropertySource("classpath:config.properties")
+//@PropertySource("classpath:config.properties")
 public class LsmLegAPIService implements iLsmLegAPIService{
 //    @Value("${LSM_LM_API_KEY}")
     private String KEY;

@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDateTime;
 
 @Service
-@PropertySource("classpath:config.properties")
+//@PropertySource("classpath:config.properties")
 public class GovLegAPIService implements iGovLegAPIService { // Government Legislative Status Service
 
     private static final Logger logger = LoggerFactory.getLogger(GovLegAPIService.class);
