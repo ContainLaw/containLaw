@@ -1,4 +1,4 @@
-package org.kangnam.containlaw.api.NsmLeg;
+package org.kangnam.containlaw.api.NsmLeg.request;
 
 import lombok.Setter;
 

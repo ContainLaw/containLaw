@@ -5,13 +5,13 @@ import lombok.Getter;
 
 @Getter
 public class Proposer {
-    String BILL_ID;
+    String BILL_NO;
     String name;
     String group;
     String chineseName;
 
-    public Proposer(String BILL_ID, String name, String group, String chineseName) {
-        this.BILL_ID = BILL_ID;
+    public Proposer(String BILL_NO, String name, String group, String chineseName) {
+        this.BILL_NO = BILL_NO;
         this.name = name;
         this.group = group;
         this.chineseName = chineseName;
@@ -19,11 +19,9 @@ public class Proposer {
 
     @Override
     public String toString() {
-        return "Proponent{" +
-                "BILL_ID='" + BILL_ID + '\'' +
-                ", name='" + name + '\'' +
-                ", group='" + group + '\'' +
-                ", chineseName='" + chineseName + '\'' +
-                '}';
+        return "제안자{" +
+                "이름='" + name + '\'' +
+                ", 소속='" + group + '\'' +
+                "}\n";
     }
 }
