@@ -20,7 +20,7 @@ public class MemberProfileService implements iMemberProfileService {
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
 
-    @Autowired
+    @Autowired(required = false) // DB 비활성화 bean null
     private MemberProfileRepository memberProfileRepository;
 
     public MemberProfileService(RestTemplate restTemplate, ObjectMapper objectMapper) {
