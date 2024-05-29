@@ -20,6 +20,7 @@ public class MemberProfileController implements iMemberProfileController{
     @Autowired
     private MemberProfileService memberProfileService;
 
+
     @GetMapping
     public List<MemberProfileDto> getAllMemberProfiles() {
         return memberProfileService.getAllMemberProfiles();

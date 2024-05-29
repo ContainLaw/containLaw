@@ -10,6 +10,7 @@ public class ContainLawApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ContainLawApplication.class, args);
+
 	}
 
 }

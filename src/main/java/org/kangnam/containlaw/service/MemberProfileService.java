@@ -1,9 +1,13 @@
 package org.kangnam.containlaw.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.kangnam.containlaw.Dto.MemberProfileDto;
 import org.kangnam.containlaw.entity.MemberProfile;
 import org.kangnam.containlaw.repository.MemberProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -13,11 +17,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class MemberProfileService implements iMemberProfileService {
-    @Autowired
     private RestTemplate restTemplate;
+    private ObjectMapper objectMapper;
 
     @Autowired
     private MemberProfileRepository memberProfileRepository;
+
+    public MemberProfileService(RestTemplate restTemplate, ObjectMapper objectMapper) {
+        this.restTemplate = restTemplate;
+        this.objectMapper = objectMapper;
+    }
 
     public List<MemberProfileDto> getAllMemberProfiles() {
         return memberProfileRepository.findAll()
@@ -63,20 +72,5 @@ public class MemberProfileService implements iMemberProfileService {
         } else {
             return null;
         }
-    }
-
-//    @Override
-    public void getProfileImg(String name) {
-        String url = createProfileImgPath(name);
-        String jsonData = restTemplate.getForObject(url, String.class);
-        System.out.println(jsonData);
-
-        /*
-        윤영이가 이미지를 DB에 저장
-        */
-    }
-    public String createProfileImgPath(String name) {
-        return "https://open.assembly.go.kr/portal/assm/search/searchAssmMemberSch.do?unitCd=100021&gubunId=MA&schHgNm="
-                + name;
     }
 }
