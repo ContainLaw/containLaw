@@ -9,6 +9,4 @@ public interface iMemberProfileService {
     List<MemberProfileDto> searchByName(String name);
     MemberProfileDto saveMemberProfile(MemberProfileDto memberProfileDto);
     MemberProfileDto updateMemberProfile(Long id, MemberProfileDto memberProfileDto);
-//    String getProfileImg(String name);
-    String createProfileImgPath(String name);
 }
