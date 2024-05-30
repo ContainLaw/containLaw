@@ -7,7 +7,8 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class AppConfig {
 
-    @Bean
+    // ChatGPTConfig와 같은 이름의 빈을 사용하지 않도록 수정
+    @Bean(name = "appRestTemplate")
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }
