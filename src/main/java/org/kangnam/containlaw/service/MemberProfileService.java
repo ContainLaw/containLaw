@@ -62,7 +62,7 @@ public class MemberProfileService implements iMemberProfileService {
         return savedProfile.toDto();
     }
 
-    public MemberProfileDto updateMemberProfile(Long id, MemberProfileDto memberProfileDto) {
+    public MemberProfileDto updateMemberProfile(Integer id, MemberProfileDto memberProfileDto) {
         Optional<MemberProfile> existingProfile = memberProfileRepository.findById(id);
         if (existingProfile.isPresent()) {
             MemberProfile memberProfile = MemberProfile.fromDto(memberProfileDto);

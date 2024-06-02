@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MemberProfileRepository extends JpaRepository<MemberProfile, Long> {
+public interface MemberProfileRepository extends JpaRepository<MemberProfile, Integer> {
     List<MemberProfile> findByNameContaining(String name);
     List<MemberProfile> findByPartyNameContaining (String partyName);
     List<MemberProfile> findByDistrictContaining (String district);

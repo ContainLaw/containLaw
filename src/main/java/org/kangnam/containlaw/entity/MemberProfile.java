@@ -6,6 +6,8 @@ import lombok.Setter;
 import org.kangnam.containlaw.Dto.MemberProfileDto;
 
 import java.util.Date;
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -13,13 +15,12 @@ import java.util.Date;
 public class MemberProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private Integer id;
     private String name;
     private String hanjaName;
     private String englishName;
     private String calendarType;
-    private Date birthDate;
+    private String birthDate;
     private String partyName;
     private String district;
     private String mainCommittee;
@@ -35,54 +36,56 @@ public class MemberProfile {
     private String youtube;
     private String blog;
 
+    @OneToMany(mappedBy = "memberProfile")
+    private List<Bill> bills;
 
     public MemberProfileDto toDto() {
-        MemberProfileDto dto = new MemberProfileDto();
-        dto.setId(this.id);
-        dto.setName(this.name);
-        dto.setHanjaName(this.hanjaName);
-        dto.setEnglishName(this.englishName);
-        dto.setCalendarType(this.calendarType);
-        dto.setBirthDate(this.birthDate);
-        dto.setPartyName(this.partyName);
-        dto.setDistrict(this.district);
-        dto.setMainCommittee(this.mainCommittee);
-        dto.setReelection(this.reelection);
-        dto.setElected(this.elected);
-        dto.setGender(this.gender);
-        dto.setPhoneNumber(this.phoneNumber);
-        dto.setOfficeNumber(this.officeNumber);
-        dto.setEmail(this.email);
-        dto.setWebsite(this.website);
-        dto.setTwitter(this.twitter);
-        dto.setFacebook(this.facebook);
-        dto.setYoutube(this.youtube);
-        dto.setBlog(this.blog);
-        return dto;
+        MemberProfileDto Dto = new MemberProfileDto();
+        Dto.setId(this.id);
+        Dto.setName(this.name);
+        Dto.setHanjaName(this.hanjaName);
+        Dto.setEnglishName(this.englishName);
+        Dto.setCalendarType(this.calendarType);
+        Dto.setBirthDate(this.birthDate);
+        Dto.setPartyName(this.partyName);
+        Dto.setDistrict(this.district);
+        Dto.setMainCommittee(this.mainCommittee);
+        Dto.setReelection(this.reelection);
+        Dto.setElected(this.elected);
+        Dto.setGender(this.gender);
+        Dto.setPhoneNumber(this.phoneNumber);
+        Dto.setOfficeNumber(this.officeNumber);
+        Dto.setEmail(this.email);
+        Dto.setWebsite(this.website);
+        Dto.setTwitter(this.twitter);
+        Dto.setFacebook(this.facebook);
+        Dto.setYoutube(this.youtube);
+        Dto.setBlog(this.blog);
+        return Dto;
     }
 
-    public static MemberProfile fromDto(MemberProfileDto dto) {
+    public static MemberProfile fromDto(MemberProfileDto Dto) {
         MemberProfile entity = new MemberProfile();
-        entity.setId(dto.getId());
-        entity.setName(dto.getName());
-        entity.setHanjaName(dto.getHanjaName());
-        entity.setEnglishName(dto.getEnglishName());
-        entity.setCalendarType(dto.getCalendarType());
-        entity.setBirthDate(dto.getBirthDate());
-        entity.setPartyName(dto.getPartyName());
-        entity.setDistrict(dto.getDistrict());
-        entity.setMainCommittee(dto.getMainCommittee());
-        entity.setReelection(dto.getReelection());
-        entity.setElected(dto.getElected());
-        entity.setGender(dto.getGender());
-        entity.setPhoneNumber(dto.getPhoneNumber());
-        entity.setOfficeNumber(dto.getOfficeNumber());
-        entity.setEmail(dto.getEmail());
-        entity.setWebsite(dto.getWebsite());
-        entity.setTwitter(dto.getTwitter());
-        entity.setFacebook(dto.getFacebook());
-        entity.setYoutube(dto.getYoutube());
-        entity.setBlog(dto.getBlog());
+        entity.setId(Dto.getId());
+        entity.setName(Dto.getName());
+        entity.setHanjaName(Dto.getHanjaName());
+        entity.setEnglishName(Dto.getEnglishName());
+        entity.setCalendarType(Dto.getCalendarType());
+        entity.setBirthDate(Dto.getBirthDate());
+        entity.setPartyName(Dto.getPartyName());
+        entity.setDistrict(Dto.getDistrict());
+        entity.setMainCommittee(Dto.getMainCommittee());
+        entity.setReelection(Dto.getReelection());
+        entity.setElected(Dto.getElected());
+        entity.setGender(Dto.getGender());
+        entity.setPhoneNumber(Dto.getPhoneNumber());
+        entity.setOfficeNumber(Dto.getOfficeNumber());
+        entity.setEmail(Dto.getEmail());
+        entity.setWebsite(Dto.getWebsite());
+        entity.setTwitter(Dto.getTwitter());
+        entity.setFacebook(Dto.getFacebook());
+        entity.setYoutube(Dto.getYoutube());
+        entity.setBlog(Dto.getBlog());
         return entity;
     }
 }
