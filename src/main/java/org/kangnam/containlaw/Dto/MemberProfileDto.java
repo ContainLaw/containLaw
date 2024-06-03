@@ -8,12 +8,12 @@ import java.util.Date;
 @Getter
 @Setter
 public class MemberProfileDto {
-    private Long id;
+    private Integer id;
     private String name;
     private String hanjaName;
     private String englishName;
     private String calendarType;
-    private Date birthDate;
+    private String birthDate;
     private String partyName;
     private String district;
     private String mainCommittee;
