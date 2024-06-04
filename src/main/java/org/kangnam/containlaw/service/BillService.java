@@ -4,7 +4,7 @@ package org.kangnam.containlaw.service;
 import lombok.extern.slf4j.Slf4j;
 import org.kangnam.containlaw.Dto.NsmLeg.LsmLegRes;
 import org.kangnam.containlaw.entity.Bill;
-import org.kangnam.containlaw.repository.BillRepository;
+import org.kangnam.containlaw.repository.BillRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +17,7 @@ import java.util.List;
 public class BillService {
 
     @Autowired
-    private BillRepository billRepository;
+    private BillRepositoryImpl billRepository;
 
     @Transactional
     public Bill saveBill(LsmLegRes.LsmLeg lsmLegFormRow) {

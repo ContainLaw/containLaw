@@ -9,8 +9,6 @@ import org.kangnam.containlaw.Dto.NsmLeg.LsmLegRes;
 import org.kangnam.containlaw.Dto.NsmLeg.Proposer;
 import org.kangnam.containlaw.utils.DataTypeConverter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -20,7 +18,7 @@ import java.util.Objects;
 
 @Service
 //@PropertySource("classpath:config.properties")
-public class LsmLegAPIService implements iLsmLegAPIService {
+public class LsmLegAPIService implements LsmLegAPIServiceImpl {
 //    @Value("${LSM_LM_API_KEY}")
     private String KEY;
 

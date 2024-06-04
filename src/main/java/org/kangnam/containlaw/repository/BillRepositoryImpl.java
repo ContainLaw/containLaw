@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BillRepository extends JpaRepository<Bill, String> {
+public interface BillRepositoryImpl extends JpaRepository<Bill, String> {
     List<Bill> findByBillNameContaining(String billName);
 }
 

@@ -2,8 +2,8 @@ package org.kangnam.containlaw.service;
 
 import org.kangnam.containlaw.entity.Bill;
 import org.kangnam.containlaw.entity.MemberProfile;
-import org.kangnam.containlaw.repository.BillRepository;
-import org.kangnam.containlaw.repository.MemberProfileRepository;
+import org.kangnam.containlaw.repository.BillRepositoryImpl;
+import org.kangnam.containlaw.repository.MemberProfileRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,10 +17,10 @@ import java.util.Optional;
 public class ProposerService {
 
     @Autowired
-    private BillRepository billRepository;
+    private BillRepositoryImpl billRepository;
 
     @Autowired
-    private MemberProfileRepository memberProfileRepository;
+    private MemberProfileRepositoryImpl memberProfileRepository;
 
     @Transactional
     public void proposeBill(Bill bill) {

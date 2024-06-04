@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface LegislativeStatusCategoryRepository extends JpaRepository<LegislativeStatusCategory, LegislativeStatusCategoryPk> {
+public interface LegStatusCategoryRepositoryImpl extends JpaRepository<LegislativeStatusCategory, LegislativeStatusCategoryPk> {
 }
