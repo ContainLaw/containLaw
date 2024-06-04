@@ -6,6 +6,8 @@ import lombok.Setter;
 import org.kangnam.containlaw.Dto.MemberProfileDto;
 
 import java.util.Date;
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -13,13 +15,13 @@ import java.util.Date;
 public class MemberProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     private String name;
     private String hanjaName;
     private String englishName;
     private String calendarType;
-    private Date birthDate;
+    private String birthDate;
     private String partyName;
     private String district;
     private String mainCommittee;

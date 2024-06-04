@@ -58,10 +58,8 @@ public class MemberProfileController implements iMemberProfileController{
         return ResponseEntity.status(HttpStatus.CREATED).body(savedProfile);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<MemberProfileDto> updateMemberProfile(@PathVariable Long id, @RequestBody MemberProfileDto memberProfileDto) {
-        MemberProfileDto updatedProfile = memberProfileService.updateMemberProfile(id, memberProfileDto);
-        return updatedProfile != null ? ResponseEntity.ok(updatedProfile) : ResponseEntity.notFound().build();
+    @Override
+    public ResponseEntity<MemberProfileDto> updateMemberProfile(Long id, MemberProfileDto memberProfileDto) {
+        return null;
     }
-
 }

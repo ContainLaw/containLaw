@@ -62,15 +62,12 @@ public class MemberProfileService implements iMemberProfileService {
         return savedProfile.toDto();
     }
 
+    @Override
     public MemberProfileDto updateMemberProfile(Long id, MemberProfileDto memberProfileDto) {
-        Optional<MemberProfile> existingProfile = memberProfileRepository.findById(id);
-        if (existingProfile.isPresent()) {
-            MemberProfile memberProfile = MemberProfile.fromDto(memberProfileDto);
-            memberProfile.setId(id);
-            MemberProfile updatedProfile = memberProfileRepository.save(memberProfile);
-            return updatedProfile.toDto();
-        } else {
-            return null;
-        }
+        return null;
+    }
+
+    public MemberProfile findByName(String name) {
+        return memberProfileRepository.findByName(name).orElseThrow(() -> new IllegalArgumentException("Profile not found"));
     }
 }
