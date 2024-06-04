@@ -1,27 +1,31 @@
 package org.kangnam.containlaw.Dto.NsmLeg;
 
 
+import jakarta.persistence.Embeddable;
 import lombok.Getter;
 
+
+@Embeddable
 @Getter
 public class Proposer {
     String BILL_NO;
     String name;
-    String group;
+    String groupName;
     String chineseName;
 
-    public Proposer(String BILL_NO, String name, String group, String chineseName) {
+    public Proposer(String BILL_NO, String name, String groupName, String chineseName) {
         this.BILL_NO = BILL_NO;
         this.name = name;
-        this.group = group;
+        this.groupName = groupName;
         this.chineseName = chineseName;
     }
+    public Proposer() {}
 
     @Override
     public String toString() {
         return "제안자{" +
                 "이름='" + name + '\'' +
-                ", 소속='" + group + '\'' +
+                ", 소속='" + groupName + '\'' +
                 "}\n";
     }
 }

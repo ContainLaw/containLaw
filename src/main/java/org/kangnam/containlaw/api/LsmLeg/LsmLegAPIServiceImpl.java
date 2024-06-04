@@ -5,7 +5,7 @@ import org.kangnam.containlaw.Dto.NsmLeg.LsmLegRes;
 import org.kangnam.containlaw.Dto.NsmLeg.Proposer;
 import java.util.List;
 
-public interface iLsmLegAPIService {
+public interface LsmLegAPIServiceImpl {
     // 국회 입법 현황 헤더목록 가져오기 API
     // API : https://open.assembly.go.kr/portal/openapi/TVBPMBILL11
     public List<LsmLegRes.LsmLeg> getRows(LsmLegReq lsmLegReq);

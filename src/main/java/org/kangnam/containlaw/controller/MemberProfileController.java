@@ -6,7 +6,6 @@ import org.kangnam.containlaw.service.MemberProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +14,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/members")
-public class MemberProfileController implements iMemberProfileController{
+public class MemberProfileController implements MemberProfileControllerImpl {
 
     @Autowired
     private MemberProfileService memberProfileService;
@@ -58,10 +57,8 @@ public class MemberProfileController implements iMemberProfileController{
         return ResponseEntity.status(HttpStatus.CREATED).body(savedProfile);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<MemberProfileDto> updateMemberProfile(@PathVariable Long id, @RequestBody MemberProfileDto memberProfileDto) {
-        MemberProfileDto updatedProfile = memberProfileService.updateMemberProfile(id, memberProfileDto);
-        return updatedProfile != null ? ResponseEntity.ok(updatedProfile) : ResponseEntity.notFound().build();
+    @Override
+    public ResponseEntity<MemberProfileDto> updateMemberProfile(Long id, MemberProfileDto memberProfileDto) {
+        return null;
     }
-
 }

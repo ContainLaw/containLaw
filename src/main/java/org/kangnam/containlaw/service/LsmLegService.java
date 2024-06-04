@@ -4,9 +4,13 @@ import org.kangnam.containlaw.Dto.NsmLeg.Proposer;
 import org.kangnam.containlaw.Dto.NsmLeg.LsmLegReq;
 import org.kangnam.containlaw.Dto.NsmLeg.LsmLegRes;
 import org.kangnam.containlaw.api.LsmLeg.LsmLegAPIService;
+import org.kangnam.containlaw.entity.Bill;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -14,30 +18,38 @@ import java.util.List;
 @Service
 public class LsmLegService {
 
+    private static final Logger logger = LoggerFactory.getLogger(LsmLegService.class);
+
     @Autowired
     private RestTemplate restTemplate;
 
     @Autowired
     private LsmLegAPIService lsmLegAPI;
 
-//    @Scheduled(cron = "0 0 18 * * *")
-    @Scheduled(fixedRate = 100000)
-    private void autoGetLsmLegState() {
-        LsmLegReq lsmLegReq = new LsmLegReq();
-        List<Proposer> proposerList;
-        // 국회 입법 현황 헤더목록 가져오기 API 호출
-        List<LsmLegRes.LsmLeg> lsmLegList = lsmLegAPI.getRows(lsmLegReq);
-        if (lsmLegList == null) return;
+    @Autowired
+    private BillService billService;
 
-        // 국회 입법 헤더 정보로 제안자 목록 크롤링
-        for (LsmLegRes.LsmLeg lsmLegFormRow : lsmLegList) {
-            proposerList = lsmLegAPI.getProposerList(lsmLegFormRow);
-            System.out.println(lsmLegAPI.getLsmLegContent(lsmLegFormRow.getBillId())+"\n"+proposerList);;
+    @Autowired
+    private ProposerService proposerService;
+
+    //    @Scheduled(cron = "0 0 18 * * *")
+    @Scheduled(fixedRate = 100000)
+    @Transactional
+    public void autoGetLsmLegState() {
+        LsmLegReq lsmLegReq = new LsmLegReq();
+        lsmLegReq.setPSize("");
+        List<LsmLegRes.LsmLeg> lsmLegList = lsmLegAPI.getRows(lsmLegReq);
+
+        if (lsmLegList == null || lsmLegList.isEmpty()) {
+            logger.warn("No legislative data received from the API");
+            return;
         }
-        /*
-            DB에 저장하는 로직 작성 필요
-            주제 및 카테고라기 ???인 -> 구현 예정
-            입법번호(lsmLegHeader.getBillId())의 제안자(proponentList)를 DB에 저장
-        */
+
+        for (LsmLegRes.LsmLeg lsmLegFormRow : lsmLegList) {
+            Bill bill = billService.saveBill(lsmLegFormRow);
+            List<Proposer> proposerList = lsmLegAPI.getProposerList(lsmLegFormRow);
+            proposerService.proposeBill(bill);
+            logger.info("법안 ID: {}가 제안자들과 함께 처리되었습니다", lsmLegFormRow.getBillId());
+        }
     }
 }

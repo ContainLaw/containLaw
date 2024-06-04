@@ -4,8 +4,6 @@ package org.kangnam.containlaw.api.GovLeg;
 import org.kangnam.containlaw.Dto.GovLeg.GovLegRes;
 import org.kangnam.containlaw.Dto.GovLegReq;
 import org.kangnam.containlaw.utils.GovLegStatReqParmMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,7 +13,7 @@ import java.time.LocalDateTime;
 
 @Service
 //@PropertySource("classpath:config.properties")
-public class GovLegAPIService implements iGovLegAPIService { // Government Legislative Status Service
+public class GovLegAPIService implements GovLegAPIServiceImpl { // Government Legislative Status Service
 
 //    @Value("${GOV_LM_API_KEY}")
     private String OC;

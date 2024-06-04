@@ -1,27 +1,23 @@
 package org.kangnam.containlaw.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.kangnam.containlaw.Dto.MemberProfileDto;
 import org.kangnam.containlaw.entity.MemberProfile;
-import org.kangnam.containlaw.repository.MemberProfileRepository;
+import org.kangnam.containlaw.repository.MemberProfileRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class MemberProfileService implements iMemberProfileService {
+public class MemberProfileService implements MemberProfileServiceImpl {
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
 
     @Autowired(required = false) // DB 비활성화 bean null
-    private MemberProfileRepository memberProfileRepository;
+    private MemberProfileRepositoryImpl memberProfileRepository;
 
     public MemberProfileService(RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
@@ -62,15 +58,12 @@ public class MemberProfileService implements iMemberProfileService {
         return savedProfile.toDto();
     }
 
+    @Override
     public MemberProfileDto updateMemberProfile(Long id, MemberProfileDto memberProfileDto) {
-        Optional<MemberProfile> existingProfile = memberProfileRepository.findById(id);
-        if (existingProfile.isPresent()) {
-            MemberProfile memberProfile = MemberProfile.fromDto(memberProfileDto);
-            memberProfile.setId(id);
-            MemberProfile updatedProfile = memberProfileRepository.save(memberProfile);
-            return updatedProfile.toDto();
-        } else {
-            return null;
-        }
+        return null;
+    }
+
+    public MemberProfile findByName(String name) {
+        return memberProfileRepository.findByName(name).orElseThrow(() -> new IllegalArgumentException("Profile not found"));
     }
 }
