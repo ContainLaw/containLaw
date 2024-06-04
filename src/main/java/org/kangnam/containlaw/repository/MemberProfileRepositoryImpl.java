@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface MemberProfileRepository extends JpaRepository<MemberProfile, Long> {
+public interface MemberProfileRepositoryImpl extends JpaRepository<MemberProfile, Long> {
     Optional<MemberProfile> findByName(String name);
     List<MemberProfile> findByNameContaining(String name);
     List<MemberProfile> findByPartyNameContaining (String partyName);

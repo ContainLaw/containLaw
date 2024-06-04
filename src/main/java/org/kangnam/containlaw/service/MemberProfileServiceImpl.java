@@ -4,7 +4,7 @@ import org.kangnam.containlaw.Dto.MemberProfileDto;
 
 import java.util.List;
 
-public interface iMemberProfileService {
+public interface MemberProfileServiceImpl {
     List<MemberProfileDto> getAllMemberProfiles();
     List<MemberProfileDto> searchByName(String name);
     MemberProfileDto saveMemberProfile(MemberProfileDto memberProfileDto);

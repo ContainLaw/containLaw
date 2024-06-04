@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-public interface iMemberProfileController {
+public interface MemberProfileControllerImpl {
     List<MemberProfileDto> getAllMemberProfiles();
     String home();
     String searchMemberProfiles(@RequestParam String name, Model model);
