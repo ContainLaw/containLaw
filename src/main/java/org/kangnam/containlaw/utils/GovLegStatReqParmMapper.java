@@ -1,4 +1,4 @@
-package org.kangnam.containlaw.api.GovLeg;
+package org.kangnam.containlaw.utils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
