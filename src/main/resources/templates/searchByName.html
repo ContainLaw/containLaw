@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1><a href="/members/">'법을 담다.'</a></h1>
+<hr/>
+<br/>
+<form action="/members/searchByName">
+    <h3>국회의원 이름: <input type="text" name="name" th:value="${searchTerm}">
+        <span><input type="submit" value="검색"></span></h3>
+</form>
+<ul>
+    <li th:each="profile : ${profiles}">
+        <a th:href="@{/members/profile/{id}(id=${profile.id})}" th:text="${profile.name} + ' - ' + ${profile.partyName} + ' - ' + ${profile.district}">Name - Party - District</a>
+    </li>
+</ul>
+
+</body>
+</html>

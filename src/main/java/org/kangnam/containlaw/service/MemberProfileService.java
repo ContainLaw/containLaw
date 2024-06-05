@@ -66,4 +66,11 @@ public class MemberProfileService implements MemberProfileServiceImpl {
     public MemberProfile findByName(String name) {
         return memberProfileRepository.findByName(name).orElseThrow(() -> new IllegalArgumentException("Profile not found"));
     }
+
+    public MemberProfile getProfileById(Long id) {
+        MemberProfile memberProfile = memberProfileRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Profile not found"));
+
+        return memberProfile;
+    }
 }
