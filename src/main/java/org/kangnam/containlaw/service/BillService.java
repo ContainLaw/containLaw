@@ -4,6 +4,7 @@ package org.kangnam.containlaw.service;
 import lombok.extern.slf4j.Slf4j;
 import org.kangnam.containlaw.Dto.NsmLeg.LsmLegRes;
 import org.kangnam.containlaw.Dto.NsmLeg.Proposer;
+import org.kangnam.containlaw.Dto.ResponseData;
 import org.kangnam.containlaw.api.LsmLeg.LsmLegAPIService;
 import org.kangnam.containlaw.entity.Bill;
 import org.kangnam.containlaw.entity.BillMemberProfile;
@@ -13,6 +14,8 @@ import org.kangnam.containlaw.repository.MemberProfileRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -23,22 +26,30 @@ import java.util.Optional;
 public class BillService {
 
     @Autowired
+    public BillService(BillRepositoryImpl billRepository, LsmLegAPIService lsmLegAPI, MemberProfileRepositoryImpl memberProfileRepository, ChatService chatService) {
+        this.billRepository = billRepository;
+        this.lsmLegAPI = lsmLegAPI;
+        this.memberProfileRepository = memberProfileRepository;
+        this.chatService = chatService;
+    }
+
+    //@Autowired
     private BillRepositoryImpl billRepository;
 
-//    @Autowired
-//    private ChatService chatService;
-
-    @Autowired
+    //@Autowired
     private LsmLegAPIService lsmLegAPI;
 
-    @Autowired
+    //@Autowired
     private MemberProfileRepositoryImpl memberProfileRepository;
+
+    //@Autowired
+    private ChatService chatService;
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 
     @Transactional
-    public void saveBill(LsmLegRes.LsmLeg lsmLegFormRow) {
+    public void saveBill(LsmLegRes.LsmLeg lsmLegFormRow) throws IOException, InterruptedException {
         Bill bill = createBillWithMemberProfiles(lsmLegFormRow);
         billRepository.save(bill);
     }
@@ -52,10 +63,10 @@ public class BillService {
     }
 
     @Transactional
-    public Bill createBillWithMemberProfiles(LsmLegRes.LsmLeg lsmLeg){
+    public Bill createBillWithMemberProfiles(LsmLegRes.LsmLeg lsmLeg) throws IOException, InterruptedException {
 
-        //String content = lsmLegAPI.getLsmLegContent(lsmLeg.getBillId());
-
+        String content = lsmLegAPI.getLsmLegContent(lsmLeg.getBillId());
+        ResponseData responseData = chatService.getAllInformation(content);
         Bill bill = new Bill();
         bill.setBillId(lsmLeg.getBillId());
         bill.setBillNo(lsmLeg.getBillNo());
@@ -66,6 +77,11 @@ public class BillService {
         bill.setProcDate(parseDate(lsmLeg.getProcDt()));
         bill.setProcResultCode(lsmLeg.getProcResultCd());
         bill.setUrl(lsmLeg.getLinkUrl());
+
+        bill.setSummary(responseData.getSummary());
+        bill.setCategory(responseData.getCategory());
+        bill.setAdvantages(responseData.getAdvantages());
+        bill.setDisadvantages(responseData.getDisadvantages());
 
         List<Proposer> proposerList = lsmLegAPI.getProposerList(lsmLeg);
         for (Proposer proposer : proposerList) {

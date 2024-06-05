@@ -12,6 +12,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 
 @Service
 public class ChatService {
@@ -24,12 +25,13 @@ public class ChatService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public ResponseData getAllInformation(String text) throws IOException, InterruptedException {
+        String truncatedText = truncateText(text, 4000);
         String prompt = String.join("\n",
-                "1- 다음 입법안 내용을 이해하기 쉽게 요약해줘(1000자 미만): " + text,
-                "2- 다음 입법안 내용이 괄호 안 16개 카테고리(경제, 보건, 교육, 환경, 노동, 사회 복지, 법 집행 및 사법, 인권 및 평등, 국제 관계, 안보 및 국방, 부동산 및 토지 관리, 가족 및 개인, 정보 및 통신, 교통 및 물류, 문화 및 예술, 과학 및 기술.) 중 어떤 카테고리에 속하는지 알려줘: " + text,
-                "3- 입법안이 집행되었을 때의 장점(255자 미만): " + text,
-                "4- 입법안이 집행되었을 때의 단점(255자 미만): " + text,
-                "출력방식은 이와 같이 해줘. 요약내용 \n\n 카테고리 \n\n 장점 \n\n 단점\n\n"
+                "1- 다음 입법안 내용을 이해하기 쉽게 요약해줘(1000자 미만): " + truncatedText,
+                "2- 다음 입법안 내용이 괄호 안 16개 카테고리(경제, 보건, 교육, 환경, 노동, 사회 복지, 법 집행 및 사법, 인권 및 평등, 국제 관계, 안보 및 국방, 부동산 및 토지 관리, 가족 및 개인, 정보 및 통신, 교통 및 물류, 문화 및 예술, 과학 및 기술.) 중 어떤 카테고리에 속하는지 알려줘: " + truncatedText,
+                "3- 입법안이 집행되었을 때의 장점(255자 미만): " + truncatedText,
+                "4- 입법안이 집행되었을 때의 단점(255자 미만): " + truncatedText,
+                "출력방식은 요약내용:, 카테고리:, 장점:, 단점:은 출력되지 않고, 이와 같이 내용만 출력되도록 해줘. 요약내용 \n\n 카테고리 \n\n 장점 \n\n 단점\n\n"
         );
 
         String body = objectMapper.writeValueAsString(new OpenAiRequest(prompt));
@@ -45,6 +47,14 @@ public class ChatService {
         return parseResponseForAllInformation(response.body());
     }
 
+    private String truncateText(String text, int maxLength) {
+        byte[] bytes = text.getBytes(StandardCharsets.UTF_8);
+        if (bytes.length <= maxLength) {
+            return text;
+        }
+        return new String(bytes, 0, maxLength, StandardCharsets.UTF_8);
+    }
+
     private ResponseData parseResponseForAllInformation(String responseBody) throws IOException {
         JsonNode rootNode = objectMapper.readTree(responseBody);
         JsonNode choicesNode = rootNode.path("choices");
@@ -52,16 +62,17 @@ public class ChatService {
             JsonNode messageNode = choicesNode.get(0).path("message").path("content");
             if (!messageNode.isMissingNode()) {
                 String[] responses = messageNode.asText().split("\n\n");
-                String summary = responses.length > 0 ? responses[0].replace("1. ", "").trim() : "";
-                String category = responses.length > 1 ? responses[1].replace("2. ", "").trim() : "";
-                String advantages = responses.length > 2 ? responses[2].replace("3. ", "").trim() : "";
-                String disadvantages = responses.length > 3 ? responses[3].replace("4. ", "").trim() : "";
+//                String summary = responses.length > 0 ? responses[0].replace("1. ", "").trim() : "";
+//                String category = responses.length > 1 ? responses[1].replace("2. ", "").trim() : "";
+//                String advantages = responses.length > 2 ? responses[2].replace("3. ", "").trim() : "";
+//                String disadvantages = responses.length > 3 ? responses[3].replace("4. ", "").trim() : "";
+                String summary = responses.length > 0 ? responses[0].replace("요약내용:", "").trim() : "";
+                String category = responses.length > 1 ? responses[1].replace("카테고리:", "").trim() : "";
+                String advantages = responses.length > 2 ? responses[2].replace("장점:", "").trim() : "";
+                String disadvantages = responses.length > 3 ? responses[3].replace("단점:", "").trim() : "";
                 return new ResponseData(summary, category, advantages, disadvantages);
             }
         }
         throw new IOException("Unexpected response format: " + responseBody);
     }
 }
-
-    // Class to store the response data
-
