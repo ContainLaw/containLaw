@@ -2,8 +2,8 @@ package org.kangnam.containlaw.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.Setter;
-import org.kangnam.containlaw.Dto.NsmLeg.Proposer;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -12,6 +12,7 @@ import java.util.List;
 @Data
 @Entity
 @Setter
+@Getter
 @Table(name = "bill")
 public class Bill {
 
@@ -24,6 +25,18 @@ public class Bill {
 
     @Column(name = "bill_name")
     private String billName;
+
+    @Column(name = "summary")
+    private String Summary;
+
+    @Column(name="category")
+    private String category;
+
+    @Column(name="advantages")
+    private String advantages;
+
+    @Column(name="disadvantages")
+    private String disadvantages;
 
     @Column(name = "proposer")
     private String proposer;
@@ -43,19 +56,13 @@ public class Bill {
     @Column(name = "url")
     private String url;
 
-    @ElementCollection
-    @CollectionTable(name = "proposer_names", joinColumns = @JoinColumn(name = "bill_id"))
-    private List<Proposer> proposerList = new ArrayList<>(); // Proposer 객체 리스트
+    @Column(name="proposer_list")
+    private String proposerList;
 
 
-    @ManyToMany
-    @JoinTable(
-            name = "legislative_status_category",
-            joinColumns = @JoinColumn(name = "bill_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
+    @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL)
+    private List<BillMemberProfile> billMemberProfiles = new ArrayList<>();
 
-    private List<Category> categories = new ArrayList<>();
 
 }
 

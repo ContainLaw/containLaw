@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 @Controller
-@RequestMapping("/bills")
+@RequestMapping("")
 public class BillController {
 
     @Autowired
@@ -26,29 +26,21 @@ public class BillController {
     @Autowired
     private MemberProfileService memberProfileService;
 
-    @GetMapping("/searchBill")
-    public String searchBillsByName(@RequestParam("law") String billName, Model model) {
+    //법안이름으로 법안 검색
+    @GetMapping("/searchByBill")
+    public String searchByBillName(@RequestParam("law") String billName, Model model) {
         List<Bill> bills = billService.findByName(billName);
         model.addAttribute("bills", bills);
         model.addAttribute("searchTerm", billName);
         return "searchByLaw";
     }
 
-    @GetMapping("/searchByName")
-    public String searchMemberProfiles(@RequestParam String name, Model model) {
-        List<MemberProfileDto> profiles = memberProfileService.searchByName(name);
-        model.addAttribute("profiles", profiles);
-        return "searchByName";
-    }
-    @GetMapping("/{id}")
-    public ResponseEntity<Bill> getBillById(@PathVariable String id) {
-        Bill bill = billService.findById(id);
-        return ResponseEntity.ok(bill);
+    //법안 상세보기
+    @GetMapping("/bills/{id}")
+    public String showBill(@PathVariable String id, Model model) {
+        Bill bill = billService.getBillById(id);
+        model.addAttribute("bill", bill);
+        return "bill";
     }
 
-    @GetMapping("/proposer/{name}")
-    public ResponseEntity<MemberProfile> getProfileByProposerName(@PathVariable String name) {
-        MemberProfile profile = memberProfileService.findByName(name);
-        return ResponseEntity.ok(profile);
-    }
 }

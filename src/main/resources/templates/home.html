@@ -5,33 +5,33 @@
     <title>법을 담다.</title>
 </head>
 <body>
-<h1><a href="/members/">'법을 담다.'</a></h1>
+<h1><a href="/">'법을 담다.'</a></h1>
 <hr/>
 <th:block th:replace="~{category :: category}"/>
 
 <h2>법안 검색</h2>
-<form action="/bills/searchBill" method="get">
+<form action="/searchByBill" method="get">
     <strong><label for="law"> 입법명: </label></strong>
     <input type="text" id="law" name="law">
     <input type="submit" value="검색">
 </form>
 
 <h2>국회의원 검색</h2>
-<form action="/members/searchByName" method="get">
+<form action="/searchByName" method="get">
     <strong><label for="name">국회의원 이름:</label></strong>
     <input type="text" id="name" name="name">
     <input type="submit" value="검색">
 </form>
 <br/>
 
-<form action="/members/searchByPartyName" method="get">
+<form action="/searchByPartyName" method="get">
     <strong><label for="partyName">국회의원 정당 이름:</label></strong>
     <input type="text" id="partyName" name="partyName">
     <input type="submit" value="검색">
 </form>
 <br/>
 
-<form action="/members/searchByDistrict" method="get">
+<form action="/searchByDistrict" method="get">
     <strong><label for="district">국회의원 선거구:</label></strong>
     <input type="text" id="district" name="district">
     <input type="submit" value="검색">

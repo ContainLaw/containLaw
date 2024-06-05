@@ -15,23 +15,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/members")
+@RequestMapping("")
 public class MemberProfileController implements MemberProfileControllerImpl {
 
     @Autowired
     private MemberProfileService memberProfileService;
 
-
-    @GetMapping
-    public List<MemberProfileDto> getAllMemberProfiles() {
-        return memberProfileService.getAllMemberProfiles();
-    }
-
+    //홈
     @GetMapping("/")
     public String home() {
         return "home";
     }
 
+    //이름으로 국회의원 검색
     @GetMapping("/searchByName")
     public String searchMemberProfiles(@RequestParam String name, Model model) {
         List<MemberProfileDto> profiles = memberProfileService.searchByName(name);
@@ -40,6 +36,7 @@ public class MemberProfileController implements MemberProfileControllerImpl {
         return "searchByName";
     }
 
+    //정당으로 국회의원 검색
     @GetMapping("/searchByPartyName")
     public String searchPartyNameProfiles(@RequestParam String partyName, Model model) {
         List<MemberProfileDto> profiles = memberProfileService.searchByPartyName(partyName);
@@ -48,6 +45,7 @@ public class MemberProfileController implements MemberProfileControllerImpl {
         return "searchByPartyName";
     }
 
+    //지역으로 국회의원 검색
     @GetMapping("/searchByDistrict")
     public String searchDistrictProfiles(@RequestParam String district, Model model) {
         List<MemberProfileDto> profiles = memberProfileService.searchByDistrict(district);
@@ -56,13 +54,14 @@ public class MemberProfileController implements MemberProfileControllerImpl {
         return "searchByDistrict";
     }
 
+    //개인 프로필
     @GetMapping("/profile/{id}")
     public String showProfile(@PathVariable Long id, Model model) {
         MemberProfile profile = memberProfileService.getProfileById(id);
         model.addAttribute("profile", profile);
+        model.addAttribute("bills", profile.getBills());
         return "profile";
     }
-
 
     @PostMapping
     public ResponseEntity<MemberProfileDto> addMemberProfile(@RequestBody MemberProfileDto memberProfileDto) {
@@ -74,4 +73,10 @@ public class MemberProfileController implements MemberProfileControllerImpl {
     public ResponseEntity<MemberProfileDto> updateMemberProfile(Long id, MemberProfileDto memberProfileDto) {
         return null;
     }
+
+    @Override
+    public List<MemberProfileDto> getAllMemberProfiles() {
+        return List.of();
+    }
+
 }
