@@ -1,31 +1,113 @@
 package org.kangnam.containlaw.service;
 
-import io.github.flashvayne.chatgpt.service.ChatgptService;
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
 @Service
-@RequiredArgsConstructor
 public class ChatService {
-    private final ChatgptService chatgptService;
 
-    // 입법안 내용을 카테고리로 분류하는 메서드
-    public String determineCategory(String lsmLegContent) {
-        String prompt = "다음 입법안 내용을 어린 아이들도 이해하기 쉽게 요약해 주세요. 요약 내용 뒤에는 해당 입법안이 어떤 카테고리에 속하는지 적어주세요. " +
-                "카테고리는 다음 16개 중에서 선택해주세요: 경제, 보건, 교육, 환경, 노동, 사회 복지, 법 집행 및 사법, 인권 및 평등, 국제 관계, 안보 및 국방, " +
-                "부동산 및 토지 관리, 가족 및 개인, 정보 및 통신, 교통 및 물류, 문화 및 예술, 과학 및 기술. " +
-                "또한 이 법안의 장점과 단점도 설명해 주세요. " +
-                "입법안 내용: " + lsmLegContent + " 요약 내용: 카테고리: 장점: 단점:";
+    @Value("${openai.api.key}")
+    private String apiKey;
 
-        String response = chatgptService.sendMessage(prompt);
+    private static final String API_URL = "https://api.openai.com/v1/chat/completions";
+    private final HttpClient httpClient = HttpClient.newHttpClient();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-        // Assuming the response is in a specific format that can be split
-        String[] parts = response.split("요약 내용:|카테고리:|장점:|단점:");
-        String summary = parts.length > 1 ? parts[1].trim() : "";
-        String category = parts.length > 2 ? parts[2].trim() : "";
-        String advantages = parts.length > 3 ? parts[3].trim() : "";
-        String disadvantages = parts.length > 4 ? parts[4].trim() : "";
+    public ResponseData getAllInformation(String text) throws IOException, InterruptedException {
+        String prompt = String.join("\n",
+                "1- 다음 입법안 내용을 이해하기 쉽게 요약해줘(1000자 미만): " + text,
+                "2- 다음 입법안 내용이 괄호 안 16개 카테고리(경제, 보건, 교육, 환경, 노동, 사회 복지, 법 집행 및 사법, 인권 및 평등, 국제 관계, 안보 및 국방, 부동산 및 토지 관리, 가족 및 개인, 정보 및 통신, 교통 및 물류, 문화 및 예술, 과학 및 기술.) 중 어떤 카테고리에 속하는지 알려줘: " + text,
+                "3- 입법안이 집행되었을 때의 장점(255자 미만): " + text,
+                "4- 입법안이 집행되었을 때의 단점(255자 미만): " + text,
+                "출력방식은 이와 같이 해줘. 요약내용 \n\n 카테고리 \n\n 장점 \n\n 단점\n\n"
+        );
 
-        return String.format("[요약 내용]: %s\n[카테고리]: %s\n[장점]: %s\n[단점]: %s", summary, category, advantages, disadvantages);
+        String body = objectMapper.writeValueAsString(new OpenAiRequest(prompt));
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(API_URL))
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + apiKey)
+                .POST(HttpRequest.BodyPublishers.ofString(body))
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        return parseResponseForAllInformation(response.body());
+    }
+
+    private ResponseData parseResponseForAllInformation(String responseBody) throws IOException {
+        JsonNode rootNode = objectMapper.readTree(responseBody);
+        JsonNode choicesNode = rootNode.path("choices");
+        if (choicesNode.isArray() && choicesNode.size() > 0) {
+            JsonNode messageNode = choicesNode.get(0).path("message").path("content");
+            if (!messageNode.isMissingNode()) {
+                String[] responses = messageNode.asText().split("\n\n");
+                String summary = responses.length > 0 ? responses[0].replace("1. ", "").trim() : "";
+                String category = responses.length > 1 ? responses[1].replace("2. ", "").trim() : "";
+                String advantages = responses.length > 2 ? responses[2].replace("3. ", "").trim() : "";
+                String disadvantages = responses.length > 3 ? responses[3].replace("4. ", "").trim() : "";
+                return new ResponseData(summary, category, advantages, disadvantages);
+            }
+        }
+        throw new IOException("Unexpected response format: " + responseBody);
+    }
+
+    // Nested class to create a proper JSON request for OpenAI API
+    private static class OpenAiRequest {
+        public String model = "gpt-4";
+        public Message[] messages;
+
+        public OpenAiRequest(String userContent) {
+            this.messages = new Message[]{new Message("user", userContent)};
+        }
+
+        private static class Message {
+            public String role;
+            public String content;
+
+            public Message(String role, String content) {
+                this.role = role;
+                this.content = content;
+            }
+        }
+    }
+
+    // Class to store the response data
+    public static class ResponseData {
+        private final String summary;
+        private final String category;
+        private final String advantages;
+        private final String disadvantages;
+
+        public ResponseData(String summary, String category, String advantages, String disadvantages) {
+            this.summary = summary;
+            this.category = category;
+            this.advantages = advantages;
+            this.disadvantages = disadvantages;
+        }
+
+        public String getSummary() {
+            return summary;
+        }
+
+        public String getCategory() {
+            return category;
+        }
+
+        public String getAdvantages() {
+            return advantages;
+        }
+
+        public String getDisadvantages() {
+            return disadvantages;
+        }
     }
 }
