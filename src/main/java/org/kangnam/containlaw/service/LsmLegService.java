@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -30,7 +31,7 @@ public class LsmLegService {
     //    @Scheduled(cron = "0 0 18 * * *")
     @Scheduled(fixedRate = 100000)
     @Transactional
-    public void autoGetLsmLegState() {
+    public void autoGetLsmLegState() throws IOException, InterruptedException {
         LsmLegReq lsmLegReq = new LsmLegReq();
         lsmLegReq.setPSize("5");
         List<LsmLegRes.LsmLeg> lsmLegList = lsmLegAPI.getRows(lsmLegReq);
