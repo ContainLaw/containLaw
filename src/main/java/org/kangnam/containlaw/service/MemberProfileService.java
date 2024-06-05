@@ -16,7 +16,7 @@ public class MemberProfileService implements MemberProfileServiceImpl {
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
 
-    @Autowired(required = false) // DB 비활성화 bean null
+    @Autowired
     private MemberProfileRepositoryImpl memberProfileRepository;
 
     public MemberProfileService(RestTemplate restTemplate, ObjectMapper objectMapper) {
@@ -24,11 +24,9 @@ public class MemberProfileService implements MemberProfileServiceImpl {
         this.objectMapper = objectMapper;
     }
 
+    @Override
     public List<MemberProfileDto> getAllMemberProfiles() {
-        return memberProfileRepository.findAll()
-                .stream()
-                .map(MemberProfile::toDto)
-                .collect(Collectors.toList());
+        return List.of();
     }
 
     public List<MemberProfileDto> searchByName(String name) {
@@ -63,14 +61,11 @@ public class MemberProfileService implements MemberProfileServiceImpl {
         return null;
     }
 
-    public MemberProfile findByName(String name) {
-        return memberProfileRepository.findByName(name).orElseThrow(() -> new IllegalArgumentException("Profile not found"));
-    }
-
     public MemberProfile getProfileById(Long id) {
         MemberProfile memberProfile = memberProfileRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Profile not found"));
 
         return memberProfile;
     }
+
 }

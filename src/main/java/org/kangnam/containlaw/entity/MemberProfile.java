@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.kangnam.containlaw.Dto.MemberProfileDto;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -55,7 +56,15 @@ public class MemberProfile {
     @Column(nullable = false, columnDefinition = "DEFAULT ''")
     private String blog;
 
+    @OneToMany(mappedBy = "memberProfile", cascade = CascadeType.ALL)
+    private List<BillMemberProfile> billMemberProfiles = new ArrayList<>();
 
+
+    public List<Bill> getBills(){
+        return billMemberProfiles.stream()
+                .map(BillMemberProfile::getBill)
+                .toList();
+    }
     public MemberProfileDto toDto() {
         MemberProfileDto dto = new MemberProfileDto();
         dto.setId(this.id);
