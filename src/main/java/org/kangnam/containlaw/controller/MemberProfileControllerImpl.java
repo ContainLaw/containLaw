@@ -1,6 +1,6 @@
 package org.kangnam.containlaw.controller;
 
-import org.kangnam.containlaw.Dto.MemberProfileDto;
+import org.kangnam.containlaw.entity.MemberProfile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 public interface MemberProfileControllerImpl {
-    List<MemberProfileDto> getAllMemberProfiles();
+    List<MemberProfile> getAllMemberProfiles();
     String home();
     String searchMemberProfiles(@RequestParam String name, Model model);
-    ResponseEntity<MemberProfileDto> addMemberProfile(@RequestBody MemberProfileDto memberProfileDto);
-    ResponseEntity<MemberProfileDto> updateMemberProfile(@PathVariable Long id, @RequestBody MemberProfileDto memberProfileDto);
+    ResponseEntity<MemberProfile> addMemberProfile(@RequestBody MemberProfile memberProfile);
+    ResponseEntity<MemberProfile> updateMemberProfile(@PathVariable Long id, @RequestBody MemberProfile memberProfile);
 }

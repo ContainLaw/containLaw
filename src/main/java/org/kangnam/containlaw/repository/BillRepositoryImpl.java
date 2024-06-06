@@ -12,5 +12,6 @@ import java.util.Optional;
 public interface BillRepositoryImpl extends JpaRepository<Bill, String> {
     List<Bill> findByBillNameContaining(String billName);
     Optional<Bill> findByBillId(String billId);
+    boolean existsByBillId(String billId);
 }
 

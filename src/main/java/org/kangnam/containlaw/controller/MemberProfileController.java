@@ -1,8 +1,6 @@
 package org.kangnam.containlaw.controller;
 
 
-import org.kangnam.containlaw.Dto.MemberProfileDto;
-import org.kangnam.containlaw.api.Profile.ProfileService;
 import org.kangnam.containlaw.entity.MemberProfile;
 import org.kangnam.containlaw.service.MemberProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +19,12 @@ public class MemberProfileController implements MemberProfileControllerImpl {
     @Autowired
     private MemberProfileService memberProfileService;
 
+
+    @Override
+    public List<MemberProfile> getAllMemberProfiles() {
+        return List.of();
+    }
+
     //홈
     @GetMapping("/")
     public String home() {
@@ -30,7 +34,7 @@ public class MemberProfileController implements MemberProfileControllerImpl {
     //이름으로 국회의원 검색
     @GetMapping("/searchByName")
     public String searchMemberProfiles(@RequestParam String name, Model model) {
-        List<MemberProfileDto> profiles = memberProfileService.searchByName(name);
+        List<MemberProfile> profiles = memberProfileService.searchByName(name);
         model.addAttribute("profiles", profiles);
         model.addAttribute("searchTerm", name);
         return "searchByName";
@@ -39,7 +43,7 @@ public class MemberProfileController implements MemberProfileControllerImpl {
     //정당으로 국회의원 검색
     @GetMapping("/searchByPartyName")
     public String searchPartyNameProfiles(@RequestParam String partyName, Model model) {
-        List<MemberProfileDto> profiles = memberProfileService.searchByPartyName(partyName);
+        List<MemberProfile> profiles = memberProfileService.searchByPartyName(partyName);
         model.addAttribute("profiles", profiles);
         model.addAttribute("searchTerm", partyName);
         return "searchByPartyName";
@@ -48,7 +52,7 @@ public class MemberProfileController implements MemberProfileControllerImpl {
     //지역으로 국회의원 검색
     @GetMapping("/searchByDistrict")
     public String searchDistrictProfiles(@RequestParam String district, Model model) {
-        List<MemberProfileDto> profiles = memberProfileService.searchByDistrict(district);
+        List<MemberProfile> profiles = memberProfileService.searchByDistrict(district);
         model.addAttribute("profiles", profiles);
         model.addAttribute("searchTerm", district);
         return "searchByDistrict";
@@ -64,19 +68,13 @@ public class MemberProfileController implements MemberProfileControllerImpl {
     }
 
     @PostMapping
-    public ResponseEntity<MemberProfileDto> addMemberProfile(@RequestBody MemberProfileDto memberProfileDto) {
-        MemberProfileDto savedProfile = memberProfileService.saveMemberProfile(memberProfileDto);
+    public ResponseEntity<MemberProfile> addMemberProfile(@RequestBody MemberProfile memberProfile) {
+        MemberProfile savedProfile = memberProfileService.saveMemberProfile(memberProfile);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedProfile);
     }
 
     @Override
-    public ResponseEntity<MemberProfileDto> updateMemberProfile(Long id, MemberProfileDto memberProfileDto) {
+    public ResponseEntity<MemberProfile> updateMemberProfile(Long id, MemberProfile memberProfile) {
         return null;
     }
-
-    @Override
-    public List<MemberProfileDto> getAllMemberProfiles() {
-        return List.of();
-    }
-
 }
