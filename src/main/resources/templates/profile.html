@@ -44,6 +44,15 @@
 </div>
 <div>
     <h2>관련 카테고리</h2>
+    <div th:each="billWithCategories : ${billsWithCategories}">
+        <ul th:each="category : ${billWithCategories.categories}">
+            <li>
+                <a th:href="@{/profile/{id}/category/{categoryName}(id=${profile.id}, categoryName=${category.name})}" th:text="${category.name}">Category Name</a>
+            </li>
+        </ul>
+    </div>
 </div>
+
+
 </body>
 </html>

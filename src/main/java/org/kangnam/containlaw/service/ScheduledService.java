@@ -28,7 +28,7 @@ public class ScheduledService {
         List<LsmLegRes.LsmLeg> lsmLegList = getLsmLegState("3");
         if (lsmLegList != null) {
             List<Bill> billList = lsmLegService.saveBillList(lsmLegList); // 최초 변환 및 저장
-//            lsmLegService.updateBillList(lsmLegList); // 제안자 추가
+            lsmLegService.updateBillList(lsmLegList); // 제안자 추가
             for (Bill bill : billList) {
                 billService.updateBill(bill); // GPT 요약
             }
