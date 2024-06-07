@@ -1,6 +1,7 @@
 package org.kangnam.containlaw.controller;
 
 
+import org.kangnam.containlaw.entity.Bill;
 import org.kangnam.containlaw.entity.MemberProfile;
 import org.kangnam.containlaw.service.MemberProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Controller
@@ -19,15 +21,28 @@ public class MemberProfileController implements MemberProfileControllerImpl {
     @Autowired
     private MemberProfileService memberProfileService;
 
+    @Autowired
+    private BillController billController;
+
 
     @Override
     public List<MemberProfile> getAllMemberProfiles() {
         return List.of();
     }
 
+    private static final int MAX_RECENT_SEARCHES = 10;
+    private List<String> recentNameSearches = new LinkedList<>();
+    private List<String> recentPartySearches = new LinkedList<>();
+    private List<String> recentDistrictSearches = new LinkedList<>();
+
     //홈
     @GetMapping("/")
-    public String home() {
+    public String home(Model model) {
+        model.addAttribute("recentBillSearches", billController.getRecentBillSearches());
+
+        model.addAttribute("recentNameSearches", recentNameSearches);
+        model.addAttribute("recentPartySearches", recentPartySearches);
+        model.addAttribute("recentDistrictSearches", recentDistrictSearches);
         return "home";
     }
 
@@ -37,6 +52,7 @@ public class MemberProfileController implements MemberProfileControllerImpl {
         List<MemberProfile> profiles = memberProfileService.searchByName(name);
         model.addAttribute("profiles", profiles);
         model.addAttribute("searchTerm", name);
+        addRecentSearch(name, recentNameSearches);
         return "searchByName";
     }
 
@@ -46,6 +62,7 @@ public class MemberProfileController implements MemberProfileControllerImpl {
         List<MemberProfile> profiles = memberProfileService.searchByPartyName(partyName);
         model.addAttribute("profiles", profiles);
         model.addAttribute("searchTerm", partyName);
+        addRecentSearch(partyName, recentPartySearches);
         return "searchByPartyName";
     }
 
@@ -55,6 +72,7 @@ public class MemberProfileController implements MemberProfileControllerImpl {
         List<MemberProfile> profiles = memberProfileService.searchByDistrict(district);
         model.addAttribute("profiles", profiles);
         model.addAttribute("searchTerm", district);
+        addRecentSearch(district, recentDistrictSearches);
         return "searchByDistrict";
     }
 
@@ -76,5 +94,45 @@ public class MemberProfileController implements MemberProfileControllerImpl {
     @Override
     public ResponseEntity<MemberProfile> updateMemberProfile(Long id, MemberProfile memberProfile) {
         return null;
+    }
+
+    @PostMapping("/clearRecentSearches")
+    public String clearRecentSearches(@RequestParam("type") String type) {
+        switch (type) {
+            case "name":
+                recentNameSearches.clear();
+                break;
+            case "partyName":
+                recentPartySearches.clear();
+                break;
+            case "district":
+                recentDistrictSearches.clear();
+                break;
+        }
+        return "redirect:/";
+    }
+
+    @GetMapping("/deleteRecentSearch")
+    public String deleteRecentSearch(@RequestParam("search") String searchTerm, @RequestParam("type") String type) {
+        switch (type) {
+            case "name":
+                recentNameSearches.remove(searchTerm);
+                break;
+            case "partyName":
+                recentPartySearches.remove(searchTerm);
+                break;
+            case "district":
+                recentDistrictSearches.remove(searchTerm);
+                break;
+        }
+        return "redirect:/";
+    }
+
+    private void addRecentSearch(String searchTerm, List<String> recentSearches) {
+        recentSearches.remove(searchTerm); // Remove if it already exists to re-add it at the top
+        recentSearches.add(0, searchTerm); // Add to the front of the list
+        if (recentSearches.size() >     MAX_RECENT_SEARCHES) {
+            recentSearches.remove(recentSearches.size() - 1); // Remove the oldest search if the list is too long
+        }
     }
 }

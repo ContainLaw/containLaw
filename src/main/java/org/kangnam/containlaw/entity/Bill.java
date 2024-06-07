@@ -72,6 +72,5 @@ public class Bill {
                 .map(BillMemberProfile::getMemberProfile)
                 .toList();
     }
-
 }
 
