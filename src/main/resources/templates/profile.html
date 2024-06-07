@@ -7,14 +7,14 @@
 <body>
 <h1>국회의원 프로필</h1>
 <hr/>
-<br/>
 
 <div>
     <h2>기본 정보</h2>
+    <img th:src="${profile.imageUrl}">
     <p>이름: <span th:text="${profile.name}">Name</span></p>
     <p>한자 이름: <span th:text="${profile.hanjaName}">Hanja Name</span></p>
     <p>영어 이름: <span th:text="${profile.englishName}">English Name</span></p>
-    <p>생년월일: <span th:text="${profile.birthDate}">Birth Date</span></p>
+    <p>생년월일: <span th:text="${profile.birthDate.split(' ')[0]}">Birth Date</span></p>
     <p>성별: <span th:text="${profile.gender}">Gender</span></p>
 </div>
 
