@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface MemberProfileControllerImpl {
     List<MemberProfile> getAllMemberProfiles();
-    String home();
+    String home(Model model);
     String searchMemberProfiles(@RequestParam String name, Model model);
     ResponseEntity<MemberProfile> addMemberProfile(@RequestBody MemberProfile memberProfile);
     ResponseEntity<MemberProfile> updateMemberProfile(@PathVariable Long id, @RequestBody MemberProfile memberProfile);

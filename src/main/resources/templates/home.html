@@ -15,6 +15,19 @@
     <input type="text" id="bill" name="billName">
     <input type="submit" value="검색">
 </form>
+<!--법안 최근검색-->
+<ul>
+    <li th:each="search : ${recentBillSearches}">
+        <a th:href="@{'/searchByBill?billName=' + ${search}}" th:text="${search}"></a>
+        <a th:href="@{'/deleteRecentBillSearch?search=' + ${search}}">삭제</a>
+    </li>
+</ul>
+<form action="/clearRecentBillSearch" method="post">
+    <input type="hidden" name="type" value="billName"/>
+    <button type="submit">전체 삭제</button>
+</form>
+<!---->
+<br/>
 
 <h2>국회의원 검색</h2>
 <form action="/searchByName" method="get">
@@ -22,13 +35,37 @@
     <input type="text" id="name" name="name">
     <input type="submit" value="검색">
 </form>
+<!--이름 최근검색-->
+<ul>
+    <li th:each="search : ${recentNameSearches}">
+        <a th:href="@{'/searchByName?name=' + ${search}}" th:text="${search}"></a>
+        <a th:href="@{'/deleteRecentSearch?search=' + ${search} + '&type=name'}">삭제</a>
+    </li>
+</ul>
+<form action="/clearRecentSearches" method="post">
+    <input type="hidden" name="type" value="name"/>
+    <button type="submit">전체 삭제</button>
+</form>
 <br/>
+<!---->
 
 <form action="/searchByPartyName" method="get">
     <strong><label for="partyName">국회의원 정당 이름:</label></strong>
     <input type="text" id="partyName" name="partyName">
     <input type="submit" value="검색">
 </form>
+<!--정당 최근검색-->
+<ul>
+    <li th:each="search : ${recentPartySearches}">
+        <a th:href="@{'/searchByPartyName?partyName=' + ${search}}" th:text="${search}"></a>
+        <a th:href="@{'/deleteRecentSearch?search=' + ${search} + '&type=partyName'}">삭제</a>
+    </li>
+</ul>
+<form action="/clearRecentSearches" method="post">
+    <input type="hidden" name="type" value="partyName"/>
+    <button type="submit">전체 삭제</button>
+</form>
+<!---->
 <br/>
 
 <form action="/searchByDistrict" method="get">
@@ -36,6 +73,17 @@
     <input type="text" id="district" name="district">
     <input type="submit" value="검색">
 </form>
-
+<!--선거구 최근검색-->
+<ul>
+    <li th:each="search : ${recentDistrictSearches}">
+        <a th:href="@{'/searchByDistrict?district=' + ${search}}" th:text="${search}"></a>
+        <a th:href="@{'/deleteRecentSearch?search=' + ${search} + '&type=district'}">삭제</a>
+    </li>
+</ul>
+<form action="/clearRecentSearches" method="post">
+    <input type="hidden" name="type" value="district"/>
+    <button type="submit">전체 삭제</button>
+</form>
+<!---->
 </body>
 </html>
