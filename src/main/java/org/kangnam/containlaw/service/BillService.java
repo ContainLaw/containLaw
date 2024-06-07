@@ -50,8 +50,9 @@ public class BillService {
 
     @Transactional
     public Bill saveBill(LsmLegRes.LsmLeg lsmLegFormRow) throws IOException, InterruptedException {
+
+        Bill bill = createBillWithMemberProfiles(lsmLegFormRow);
         if (!billRepository.existsByBillId(lsmLegFormRow.getBillId())) {
-            Bill bill = createBillWithMemberProfiles(lsmLegFormRow);
             billRepository.saveAndFlush(bill);  // Bill 엔티티를 먼저 저장 및 플러시
 
             // 각 BillMemberProfile 엔티티를 명시적으로 저장
@@ -65,7 +66,7 @@ public class BillService {
             return bill;
         } else {
             log.info("법안 ID: {}는 이미 존재합니다", lsmLegFormRow.getBillId());
-            return null;
+            return bill;
         }
     }
 
@@ -92,9 +93,19 @@ public class BillService {
     }
     @Transactional
     public void updateBill(Bill bill) throws IOException, InterruptedException {
+        String content = null;
+        ResponseData responseData = null;
         try {
-            String content = lsmLegAPI.getLsmLegContent(bill.getBillId());
-            ResponseData responseData = chatService.getAllInformation(content);
+            content = lsmLegAPI.getLsmLegContent(bill.getBillId());
+        } catch (Exception e) {
+            log.info("입법안 상세 내용 호출 실패 ㅜ,ㅜ BILL_ID : " + bill.getBillId());
+        }
+        try {
+            responseData = chatService.getAllInformation(content);
+        } catch (Exception e) {
+            log.info("GPT 요약 실패 ㅜ,ㅜ BILL_ID : " + bill.getBillId());
+        }
+        try {
             bill.setSummary(responseData.getSummary());
             bill.setAdvantages(responseData.getAdvantages());
             bill.setDisadvantages(responseData.getDisadvantages());
@@ -113,7 +124,7 @@ public class BillService {
             bill.setCategories(new ArrayList<>(categorySet));
             billRepository.save(bill);
         }catch (Exception e) {
-            log.info("GPT 요약 실패 ㅜ,ㅜ BILL_ID : " + bill.getBillId());
+            log.info("GPT 요약 내용 저장 실패 ㅜ,ㅜ BILL_ID : " + bill.getBillId());
         }
     }
     public void updateBillProposer(LsmLegRes.LsmLeg lsmLeg) {
