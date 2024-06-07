@@ -127,25 +127,43 @@ public class BillService {
             log.info("GPT 요약 내용 저장 실패 ㅜ,ㅜ BILL_ID : " + bill.getBillId());
         }
     }
-    public void updateBillProposer(LsmLegRes.LsmLeg lsmLeg) {
-        try {
-            List<Proposer> proposerList = lsmLegAPI.getProposerList(lsmLeg);
-            for (Proposer proposer : proposerList) {
-                String proposerName = proposer.getName();
-                Bill bill = billRepository.findByBillId(lsmLeg.getBillId());
-                MemberProfile member = memberProfileRepository.findByName(proposerName);
-                if (member != null) {
-                    BillMemberProfile billMemberProfile = new BillMemberProfile();
-                    billMemberProfile.setBill(bill);
-                    billMemberProfile.setMemberProfile(member);
-                    bill.getBillMemberProfiles().add(billMemberProfile);
-                    billMemberProfileRepository.save(billMemberProfile);
+
+@Transactional
+public void updateBillProposer(LsmLegRes.LsmLeg lsmLeg) {
+    try {
+        List<Proposer> proposerList = lsmLegAPI.getProposerList(lsmLeg);
+        Bill bill = billRepository.findByBillId(lsmLeg.getBillId());
+
+        for (Proposer proposer : proposerList) {
+            String proposerName = proposer.getName();
+            String proposerHanjaName = proposer.getChineseName(); // Proposer 객체에 hanja_name 필드가 있다고 가정
+            List<MemberProfile> memberProfiles = memberProfileRepository.findByName(proposerName);
+
+            for (MemberProfile memberProfile : memberProfiles) {
+                if (proposerHanjaName.equals(memberProfile.getHanjaName())) {
+                    MemberProfile selectedMember = memberProfile; // effectively final
+
+                    boolean alreadyExists = bill.getBillMemberProfiles().stream()
+                            .anyMatch(bmp -> bmp.getMemberProfile().equals(selectedMember));
+
+                    if (!alreadyExists) {
+                        BillMemberProfile billMemberProfile = new BillMemberProfile();
+                        billMemberProfile.setBill(bill);
+                        billMemberProfile.setMemberProfile(selectedMember);
+
+                        bill.getBillMemberProfiles().add(billMemberProfile);
+                        billMemberProfileRepository.save(billMemberProfile);
+                    }
+                    break; // Break after finding the correct memberProfile
                 }
             }
-        } catch (Exception e) {
-            log.info("제안자 업데이트 실패 ㅜ,ㅜ BILL_ID : " + lsmLeg.getBillId() + e.getMessage());
         }
+    } catch (Exception e) {
+        log.info("제안자 업데이트 실패 ㅜ,ㅜ BILL_ID : {} - {}", lsmLeg.getBillId(), e.getMessage());
     }
+}
+
+
 
     private static LocalDate parseDate(String date) {
         if (date == null || date.isEmpty()) {
