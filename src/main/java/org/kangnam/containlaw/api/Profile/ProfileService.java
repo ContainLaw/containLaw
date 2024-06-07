@@ -29,7 +29,7 @@ public class ProfileService {
         return "";
     }
     public String createProfileImgPath(String name) {
-        return "https://open.assembly.go.kr/portal/assm/search/searchAssmMemberSch.do?unitCd=100021&gubunId=MA&schHgNm="
+        return "https://open.assembly.go.kr/portal/assm/search/searchAssmMemberSch.do?statusCd=060001?unitCd=100021&gubunId=MA&schHgNm="
                 + name;
     }
 }
