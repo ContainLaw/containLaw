@@ -123,20 +123,16 @@ public class BillService {
                 String proposerName = proposer.getName();
                 Bill bill = billRepository.findByBillId(lsmLeg.getBillId());
                 MemberProfile member = memberProfileRepository.findByName(proposerName);
-//                member.setBillMemberProfiles(new List<BillMemberProfile> ());
                 if (member != null) {
-//                    MemberProfile memberProfile = optionalMemberProfile.get();
-
                     BillMemberProfile billMemberProfile = new BillMemberProfile();
                     billMemberProfile.setBill(bill);
                     billMemberProfile.setMemberProfile(member);
                     bill.getBillMemberProfiles().add(billMemberProfile);
                     billMemberProfileRepository.save(billMemberProfile);
-
                 }
             }
-        }catch (Exception e) {
-            log.info("제안자 크롤링 실패 ㅜ,ㅜ BILL_ID : " + lsmLeg.getBillId() + e.getMessage());
+        } catch (Exception e) {
+            log.info("제안자 업데이트 실패 ㅜ,ㅜ BILL_ID : " + lsmLeg.getBillId() + e.getMessage());
         }
     }
 
