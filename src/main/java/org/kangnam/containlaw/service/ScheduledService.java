@@ -19,16 +19,19 @@ public class ScheduledService {
     private LsmLegAPIService lsmLegAPI;
     @Autowired
     private LsmLegService lsmLegService;
-
+    @Autowired
+    private BillService billService;
     private static final Logger logger = LoggerFactory.getLogger(LsmLegService.class);
 
     @Scheduled(fixedRate = 100000)
     public void autoUpdateNewLsmLeg() throws IOException, InterruptedException {
-        List<LsmLegRes.LsmLeg> lsmLegList = getLsmLegState("10");
+        List<LsmLegRes.LsmLeg> lsmLegList = getLsmLegState("3");
         if (lsmLegList != null) {
-//            List<Bill> billList = lsmLegService.saveBillList(lsmLegList); // 최초 변환 및 저장
-            lsmLegService.updateBillList(lsmLegList); // 제안자 추가
-//        updateBill(billList); // GPT 요약
+            List<Bill> billList = lsmLegService.saveBillList(lsmLegList); // 최초 변환 및 저장
+//            lsmLegService.updateBillList(lsmLegList); // 제안자 추가
+            for (Bill bill : billList) {
+                billService.updateBill(bill); // GPT 요약
+            }
         }
 
     }
