@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>법을 담다.</title>
+</head>
+<body>
+<h1><a href="/">'법을 담다.'</a></h1>
+<hr/>
+<th:block th:replace="~{category :: category}"/>
+<hr/>
+<h3 th:text="${category}"></h3>
+<ul>
+    <li th:each="bill : ${bills}">
+        <a th:href="@{/bills/{id}(id=${bill.billId})}" th:text="${bill.billName}">billName</a>
+    </li>
+</ul>
+</body>
+</html>
