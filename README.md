@@ -3,17 +3,17 @@
 
 > 강남대학교 소프트웨어학과 웹서버프레임워크 자율프로젝트
 >
-> 개발기간 : 2024.05.14 ~ 2024.06.
+> 개발기간 : 2024.05.14 ~ 2024.06.10
 ---
 <br>
 
 ## 🤝 Member
 
-|                                     김영록                                      |                                     이다은                                     |                                      이서우                                      |                                     이윤영                                     |
+|                                     김영록                                      |                                     이다은                                     |                                      이서우                                      |                                     이윤영(귀요미)                                     |
 | :-----------------------------------------------------------------------------: | :----------------------------------------------------------------------------: | :------------------------------------------------------------------------------: | :------------------------------------------------------------------------------:|
 | <img src="https://avatars.githubusercontent.com/u/95115004?v=4" width="150px"/> | <img src="https://avatars.githubusercontent.com/u/129300314?v=4" width="150px"/> | <img src="https://avatars.githubusercontent.com/u/145416041?v=4" width="150px"/> | <img src="https://avatars.githubusercontent.com/u/130331004?v=4" width="150px"/>|  
 |                   [@rogi-rogi](https://github.com/rogi-rogi)                    |                     [@leeda973](https://github.com/leeda973)                   |                  [@seowooda](https://github.com/seowooda)                        |                  [@lydbsdud](https://github.com/lydbsdud)                 |
-| <p style="white-space:nowrap">기획, 서버 개발, <br>입법 데이터 조사 및 수집(open API, 크롤링)</p>|                             chatGPT 프롬프트처리, 디자인                |                          페이지 개발, 디자인                             |              chatGPT 프롬프트 처리, ERD구성, <br>국회의원 프로파일 조사 및 수집  |
+| <p style="white-space:nowrap">기획, 서버 개발, <br>입법 데이터 조사 및 수집(open API, 크롤링)</p>     |                             chatGPT 프롬프트 처리, <br>디자인                |                        thymeleaf를 이용한 페이지 개발, <br>디자인, 최근 검색어 기능, 컨트롤러 연결                           |              chatGPT 프롬프트 처리, <br>ERD구성, <br>국회의원 프로파일 조사 및 수집  |
 
 <hr/><br>
 
