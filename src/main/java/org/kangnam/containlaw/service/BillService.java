@@ -32,7 +32,6 @@ public class BillService {
     private final MemberProfileRepositoryImpl memberProfileRepository;
     private final ChatService chatService;
     private final CategoryRepositoryImpl categoryRepository;
-    private final ProfileService profileService;
     private final BillMemberProfileRepositoryImpl billMemberProfileRepository;
 
     @Autowired
@@ -44,14 +43,13 @@ public class BillService {
         this.memberProfileRepository = memberProfileRepository;
         this.chatService = chatService;
         this.categoryRepository = categoryRepository;
-        this.profileService = profileService;
         this.billMemberProfileRepository = billMemberProfileRepository;
     }
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Transactional
-    public void saveBill(LsmLegRes.LsmLeg lsmLegFormRow) throws IOException, InterruptedException {
+    public Bill saveBill(LsmLegRes.LsmLeg lsmLegFormRow) throws IOException, InterruptedException {
         if (!billRepository.existsByBillId(lsmLegFormRow.getBillId())) {
             Bill bill = createBillWithMemberProfiles(lsmLegFormRow);
             billRepository.saveAndFlush(bill);  // Bill 엔티티를 먼저 저장 및 플러시
@@ -64,8 +62,10 @@ public class BillService {
                     billMemberProfileRepository.save(billMemberProfile);
                 }
             }
+            return bill;
         } else {
             log.info("법안 ID: {}는 이미 존재합니다", lsmLegFormRow.getBillId());
+            return null;
         }
     }
 
@@ -76,12 +76,8 @@ public class BillService {
     public Bill findById(String id) {
         return billRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Bill not found"));
     }
-
     @Transactional
     public Bill createBillWithMemberProfiles(LsmLegRes.LsmLeg lsmLeg) throws IOException, InterruptedException {
-        String content = lsmLegAPI.getLsmLegContent(lsmLeg.getBillId());
-        ResponseData responseData = chatService.getAllInformation(content);
-
         Bill bill = new Bill();
         bill.setBillId(lsmLeg.getBillId());
         bill.setBillNo(lsmLeg.getBillNo());
@@ -92,41 +88,56 @@ public class BillService {
         bill.setProcDate(parseDate(lsmLeg.getProcDt()));
         bill.setProcResultCode(lsmLeg.getProcResultCd());
         bill.setUrl(lsmLeg.getLinkUrl());
+        return bill;
+    }
+    @Transactional
+    public void updateBill(Bill bill) throws IOException, InterruptedException {
+        try {
+            String content = lsmLegAPI.getLsmLegContent(bill.getBillId());
+            ResponseData responseData = chatService.getAllInformation(content);
+            bill.setSummary(responseData.getSummary());
+            bill.setAdvantages(responseData.getAdvantages());
+            bill.setDisadvantages(responseData.getDisadvantages());
 
-        bill.setSummary(responseData.getSummary());
-        bill.setAdvantages(responseData.getAdvantages());
-        bill.setDisadvantages(responseData.getDisadvantages());
-
-        List<String> categoriesFromChatGPT = Arrays.asList(responseData.getCategory().split(",\\s*"));
-        Set<Category> categorySet = new HashSet<>();
-        for (String categoryName : categoriesFromChatGPT) {
-            Category category = categoryRepository.findByName(categoryName)
-                    .orElseGet(() -> {
-                        Category newCategory = new Category();
-                        newCategory.setName(categoryName);
-                        return categoryRepository.save(newCategory);
-                    });
-            categorySet.add(category);
+            List<String> categoriesFromChatGPT = Arrays.asList(responseData.getCategory().split(",\\s*"));
+            Set<Category> categorySet = new HashSet<>();
+            for (String categoryName : categoriesFromChatGPT) {
+                Category category = categoryRepository.findByName(categoryName)
+                        .orElseGet(() -> {
+                            Category newCategory = new Category();
+                            newCategory.setName(categoryName);
+                            return categoryRepository.save(newCategory);
+                        });
+                categorySet.add(category);
+            }
+            bill.setCategories(new ArrayList<>(categorySet));
+            billRepository.save(bill);
+        }catch (Exception e) {
+            log.info("GPT 요약 실패 ㅜ,ㅜ BILL_ID : " + bill.getBillId());
         }
-        bill.setCategories(new ArrayList<>(categorySet));
+    }
+    public void updateBillProposer(LsmLegRes.LsmLeg lsmLeg) {
+        try {
+            List<Proposer> proposerList = lsmLegAPI.getProposerList(lsmLeg);
+            for (Proposer proposer : proposerList) {
+                String proposerName = proposer.getName();
+                Bill bill = billRepository.findByBillId(lsmLeg.getBillId());
+                MemberProfile member = memberProfileRepository.findByName(proposerName);
+//                member.setBillMemberProfiles(new List<BillMemberProfile> ());
+                if (member != null) {
+//                    MemberProfile memberProfile = optionalMemberProfile.get();
 
-        List<Proposer> proposerList = lsmLegAPI.getProposerList(lsmLeg);
-        for (Proposer proposer : proposerList) {
-            String proposerName = proposer.getName();
-            Optional<MemberProfile> optionalMemberProfile = memberProfileRepository.findByName(proposerName);
-            if (optionalMemberProfile.isPresent()) {
-                MemberProfile memberProfile = optionalMemberProfile.get();
-                boolean exists = bill.getBillMemberProfiles().stream()
-                        .anyMatch(bmp -> bmp.getMemberProfile().getId().equals(memberProfile.getId()));
-                if (!exists) {
                     BillMemberProfile billMemberProfile = new BillMemberProfile();
                     billMemberProfile.setBill(bill);
-                    billMemberProfile.setMemberProfile(memberProfile);
+                    billMemberProfile.setMemberProfile(member);
                     bill.getBillMemberProfiles().add(billMemberProfile);
+                    billMemberProfileRepository.save(billMemberProfile);
+
                 }
             }
+        }catch (Exception e) {
+            log.info("제안자 크롤링 실패 ㅜ,ㅜ BILL_ID : " + lsmLeg.getBillId() + e.getMessage());
         }
-        return bill;
     }
 
     private static LocalDate parseDate(String date) {
@@ -137,7 +148,6 @@ public class BillService {
     }
 
     public Bill getBillById(String id) {
-        return billRepository.findByBillId(id)
-                .orElseThrow(() -> new IllegalArgumentException("Bill not found"));
+        return billRepository.findByBillId(id);
     }
 }
