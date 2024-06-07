@@ -1,7 +1,10 @@
 package org.kangnam.containlaw.controller;
 
 
+import lombok.extern.slf4j.Slf4j;
+import org.kangnam.containlaw.Dto.BillWithCategoriesDTO;
 import org.kangnam.containlaw.entity.Bill;
+import org.kangnam.containlaw.entity.Category;
 import org.kangnam.containlaw.entity.MemberProfile;
 import org.kangnam.containlaw.service.MemberProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
+@Slf4j
 @Controller
 @RequestMapping("")
 public class MemberProfileController implements MemberProfileControllerImpl {
@@ -81,8 +84,41 @@ public class MemberProfileController implements MemberProfileControllerImpl {
     public String showProfile(@PathVariable Long id, Model model) {
         MemberProfile profile = memberProfileService.getProfileById(id);
         model.addAttribute("profile", profile);
-        model.addAttribute("bills", profile.getBills());
+
+        List<Bill> bills = profile.getBills();
+        List<BillWithCategoriesDTO> billsWithCategories = new ArrayList<>();
+
+        for (Bill bill : bills) {
+            Set<Category> categories = new HashSet<>(bill.getCategories());
+            BillWithCategoriesDTO dto = new BillWithCategoriesDTO(bill, categories);
+            billsWithCategories.add(dto);
+        }
+
+        model.addAttribute("billsWithCategories", billsWithCategories);
         return "profile";
+    }
+
+    //국회의원과 카테고리로 법안 검색
+    @GetMapping("/profile/{id}/category/{categoryName}")
+    public String getBillsByMemberAndCategory(@PathVariable Long id, @PathVariable String categoryName, Model model) {
+        MemberProfile profile = memberProfileService.getProfileById(id);
+        model.addAttribute("profile", profile);
+
+        List<Bill> bills = profile.getBills();
+        List<Bill> filteredBills = new ArrayList<>();
+
+        for (Bill bill : bills) {
+            for (Category category : bill.getCategories()) {
+                if (category.getName().equals(categoryName)) {
+                    filteredBills.add(bill);
+                    break;
+                }
+            }
+        }
+
+        model.addAttribute("bills", filteredBills);
+        model.addAttribute("category", categoryName);
+        return "searchByMemberAndCategory";
     }
 
     @PostMapping

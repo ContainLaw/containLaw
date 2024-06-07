@@ -61,9 +61,8 @@ public class MemberProfileService implements MemberProfileServiceImpl {
 
     @Override
     public MemberProfile getProfileById(Long id) {
-        MemberProfile memberProfile = memberProfileRepository.findById(id)
+        return memberProfileRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Profile not found"));
-        return memberProfile;
     }
 
     public void updateProfileImageUrl(MemberProfile memberProfile) {
