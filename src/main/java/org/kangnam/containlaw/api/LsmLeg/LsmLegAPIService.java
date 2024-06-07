@@ -7,7 +7,10 @@ import org.jsoup.select.Elements;
 import org.kangnam.containlaw.Dto.NsmLeg.LsmLegReq;
 import org.kangnam.containlaw.Dto.NsmLeg.LsmLegRes;
 import org.kangnam.containlaw.Dto.NsmLeg.Proposer;
+import org.kangnam.containlaw.service.LsmLegService;
 import org.kangnam.containlaw.utils.DataTypeConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -26,6 +29,8 @@ public class LsmLegAPIService implements LsmLegAPIServiceImpl {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    private static final Logger logger = LoggerFactory.getLogger(LsmLegService.class);
     @Override
     public List<LsmLegRes.LsmLeg> getRows(LsmLegReq lsmLegReq) {
 
@@ -50,10 +55,11 @@ public class LsmLegAPIService implements LsmLegAPIServiceImpl {
     @Override
     public List<Proposer> getProposerList(LsmLegRes.LsmLeg row) {
         String url = makeLsmLegProposerReqUrl(row);
+        System.out.println(url);
         List<Proposer> proposerList = new ArrayList<>();
         try {
             Document doc = Jsoup.connect(url).get();
-            Elements aTextList = doc.select("#periodDiv > div.layerInScroll.coaTxtScroll > div a");
+            Elements aTextList = doc.select("#periodDiv > div.layerInScroll.coaTxtScroll > div.links.textType02.mt20 > a");
             if (aTextList.isEmpty()) { // 제안자가 1명인 경우 국회의원 프로필 바로가기 페이지가 존재하지 않음
                 proposerList.add(new Proposer(row.getBillNo(), row.getProposer(),"",""));
             } else {
@@ -67,7 +73,7 @@ public class LsmLegAPIService implements LsmLegAPIServiceImpl {
             }
             return proposerList;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.info("제안자 크롤링 실패 ㅜ,ㅜ [url] : " + url);
             return null;
         }
     }
