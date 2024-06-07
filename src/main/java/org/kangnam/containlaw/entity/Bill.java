@@ -29,8 +29,13 @@ public class Bill {
     @Column(name = "summary")
     private String Summary;
 
-    @Column(name="category")
-    private String category;
+    @ManyToMany
+    @JoinTable(
+            name = "bill_category",
+            joinColumns = @JoinColumn(name = "bill_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<Category> categories = new ArrayList<>();
 
     @Column(name="advantages")
     private String advantages;
@@ -59,10 +64,14 @@ public class Bill {
     @Column(name="proposer_list")
     private String proposerList;
 
-
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL)
     private List<BillMemberProfile> billMemberProfiles = new ArrayList<>();
 
+    public List<MemberProfile> getMembers() {
+        return billMemberProfiles.stream()
+                .map(BillMemberProfile::getMemberProfile)
+                .toList();
+    }
 
 }
 

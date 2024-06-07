@@ -1,12 +1,10 @@
 package org.kangnam.containlaw.controller;
 
-import org.kangnam.containlaw.Dto.MemberProfileDto;
 import org.kangnam.containlaw.entity.Bill;
-import org.kangnam.containlaw.entity.MemberProfile;
 import org.kangnam.containlaw.service.BillService;
+import org.kangnam.containlaw.service.CategoryService;
 import org.kangnam.containlaw.service.MemberProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +22,7 @@ public class BillController {
     private BillService billService;
 
     @Autowired
-    private MemberProfileService memberProfileService;
+    private CategoryService categoryService;
 
     //법안이름으로 법안 검색
     @GetMapping("/searchByBill")
@@ -40,7 +38,16 @@ public class BillController {
     public String showBill(@PathVariable String id, Model model) {
         Bill bill = billService.getBillById(id);
         model.addAttribute("bill", bill);
+        model.addAttribute("profiles", bill.getMembers());
         return "bill";
     }
 
+    //카테고리별 법안 검색
+    @GetMapping("/category/{category}")
+    public String getBillsByCategory(@PathVariable String categoryName, Model model) {
+        List<Bill> bills = categoryService.findBillsByCategory(categoryName);
+        model.addAttribute("bills", bills);
+        model.addAttribute("category", categoryName);
+        return "searchByCategory";
+    }
 }

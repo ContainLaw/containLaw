@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"bill_id", "member_profile_id"})})
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"bill_id", "memberprofile_id"})})
 public class BillMemberProfile {
 
     @Id

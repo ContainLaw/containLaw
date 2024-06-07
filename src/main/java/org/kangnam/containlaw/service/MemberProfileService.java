@@ -1,7 +1,5 @@
 package org.kangnam.containlaw.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.kangnam.containlaw.Dto.MemberProfileDto;
 import org.kangnam.containlaw.entity.MemberProfile;
 import org.kangnam.containlaw.repository.MemberProfileRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,58 +12,50 @@ import java.util.stream.Collectors;
 @Service
 public class MemberProfileService implements MemberProfileServiceImpl {
     private RestTemplate restTemplate;
-    private ObjectMapper objectMapper;
 
     @Autowired
     private MemberProfileRepositoryImpl memberProfileRepository;
 
-    public MemberProfileService(RestTemplate restTemplate, ObjectMapper objectMapper) {
+    public MemberProfileService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.objectMapper = objectMapper;
     }
 
     @Override
-    public List<MemberProfileDto> getAllMemberProfiles() {
-        return List.of();
+    public List<MemberProfile> getAllMemberProfiles() {
+        return memberProfileRepository.findAll();
     }
 
-    public List<MemberProfileDto> searchByName(String name) {
-        return memberProfileRepository.findByNameContaining(name)
-                .stream()
-                .map(MemberProfile::toDto)
-                .collect(Collectors.toList());
+    public List<MemberProfile> searchByName(String name) {
+        return memberProfileRepository.findByNameContaining(name);
     }
 
-    public List<MemberProfileDto> searchByPartyName(String partyName){
-        return memberProfileRepository.findByPartyNameContaining(partyName)
-                .stream()
-                .map(MemberProfile::toDto)
-                .collect(Collectors.toList());
+
+    public List<MemberProfile> searchByPartyName(String partyName){
+        return memberProfileRepository.findByPartyNameContaining(partyName);
     }
 
-    public List<MemberProfileDto> searchByDistrict(String district){
-        return memberProfileRepository.findByDistrictContaining(district)
-                .stream()
-                .map(MemberProfile::toDto)
-                .collect(Collectors.toList());
+    public List<MemberProfile> searchByDistrict(String district){
+        return memberProfileRepository.findByDistrictContaining(district);
     }
 
-    public MemberProfileDto saveMemberProfile(MemberProfileDto memberProfileDto) {
-        MemberProfile memberProfile = MemberProfile.fromDto(memberProfileDto);
-        MemberProfile savedProfile = memberProfileRepository.save(memberProfile);
-        return savedProfile.toDto();
+    public MemberProfile saveMemberProfile(MemberProfile memberProfile) {
+        return memberProfileRepository.save(memberProfile);
     }
 
     @Override
-    public MemberProfileDto updateMemberProfile(Long id, MemberProfileDto memberProfileDto) {
-        return null;
+    public MemberProfile updateMemberProfile(Long id, MemberProfile memberProfile) {
+        MemberProfile existingProfile = memberProfileRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Profile not found"));
+
+        existingProfile.setName(memberProfile.getName());
+        existingProfile.setPartyName(memberProfile.getPartyName());
+        existingProfile.setDistrict(memberProfile.getDistrict());
+
+        return memberProfileRepository.save(existingProfile);
     }
 
     public MemberProfile getProfileById(Long id) {
-        MemberProfile memberProfile = memberProfileRepository.findById(id)
+        return memberProfileRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Profile not found"));
-
-        return memberProfile;
     }
-
 }
