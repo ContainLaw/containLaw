@@ -8,4 +8,5 @@ public interface MemberProfileServiceImpl {
     List<MemberProfile> searchByName(String name);
     MemberProfile saveMemberProfile(MemberProfile memberProfile);
     MemberProfile updateMemberProfile(Long id, MemberProfile  memberProfile);
+    MemberProfile getProfileById(Long id);
 }
