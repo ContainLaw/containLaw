@@ -69,8 +69,8 @@ public class BillService {
         }
     }
 
-    public List<Bill> findByName(String name) {
-        return billRepository.findByBillNameContaining(name);
+    public List<Bill> findByBillName(String billName) {
+        return billRepository.findByBillNameContaining(billName);
     }
 
     public Bill findById(String id) {
