@@ -19,10 +19,12 @@
 
 <h2>제안자</h2>
 <ul>
-    <li th:each="profile : ${profiles}">
+    <li th:if="${bill.proposer != null}" th:each="profile : ${profiles}">
         <strong>이름:</strong>
         <span th:if="${profile.name != null}" th:text="${profile.name}">이름</span>
-        <span th:unless="${profile.name != null}" th:text="'발의자와 동일합니다.'">발의자와 동일합니다.</span>
+    </li>
+    <li th:unless="${bill.proposer != null}">
+       <span th:text="'발의자와 동일합니다.'">발의자와 동일합니다.</span>
     </li>
 </ul>
 
