@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Member Profile</title>
+</head>
+<body>
+<h1>국회의원 프로필</h1>
+<hr/>
+
+<div>
+    <h2>기본 정보</h2>
+    <img th:src="${profile.imageUrl}">
+    <p>이름: <span th:text="${profile.name}">Name</span></p>
+    <p>한자 이름: <span th:text="${profile.hanjaName}">Hanja Name</span></p>
+    <p>영어 이름: <span th:text="${profile.englishName}">English Name</span></p>
+    <p>생년월일: <span th:text="${profile.birthDate.split(' ')[0]}">Birth Date</span></p>
+    <p>성별: <span th:text="${profile.gender}">Gender</span></p>
+</div>
+
+<div>
+    <h2>정치 정보</h2>
+    <p>소속 정당: <span th:text="${profile.partyName}">Party Name</span></p>
+    <p>선거구: <span th:text="${profile.district}">District</span></p>
+    <p>주요 위원회: <span th:text="${profile.mainCommittee}">Main Committee</span></p>
+    <p>재선 여부: <span th:text="${profile.reelection}">Reelection</span></p>
+    <p>당선 횟수: <span th:text="${profile.elected}">Elected</span></p>
+</div>
+
+<div>
+    <h2>연락처 정보</h2>
+    <p>전화번호: <span th:text="${profile.phoneNumber}">Phone Number</span></p>
+    <p>사무실 번호: <span th:text="${profile.officeNumber}">Office Number</span></p>
+    <p>이메일: <span th:text="${profile.email}">Email</span></p>
+    <p>웹사이트: <span th:text="${profile.website}">Website</span></p>
+</div>
+
+<div>
+    <h2>소셜 미디어</h2>
+    <p>트위터: <a th:href="${profile.twitter}" th:text="${profile.twitter}">Twitter</a></p>
+    <p>페이스북: <a th:href="${profile.facebook}" th:text="${profile.facebook}">Facebook</a></p>
+    <p>유튜브: <a th:href="${profile.youtube}" th:text="${profile.youtube}">YouTube</a></p>
+    <p>블로그: <a th:href="${profile.blog}" th:text="${profile.blog}">Blog</a></p>
+</div>
+<div>
+    <h2>관련 카테고리</h2>
+    <div th:each="billWithCategories : ${billsWithCategories}">
+        <ul th:each="category : ${billWithCategories.categories}">
+            <li>
+                <a th:href="@{/profile/{id}/category/{categoryName}(id=${profile.id}, categoryName=${category.name})}" th:text="${category.name}">Category Name</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+</body>
+</html>

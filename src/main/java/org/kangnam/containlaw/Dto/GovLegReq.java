@@ -1,7 +1,5 @@
-package org.kangnam.containlaw.api.GovLeg;
+package org.kangnam.containlaw.Dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.Setter;
 
 @Setter

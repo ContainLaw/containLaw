@@ -39,6 +39,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'mysql:mysql-connector-java:8.0.28'
 	runtimeOnly 'mysql:mysql-connector-java'
+	runtimeOnly 'org.springframework.boot:spring-boot-starter-tomcat'//
+	implementation 'io.github.flashvayne' +
+			'' +
+			':chatgpt-spring-boot-starter:1.0.5'
+	implementation 'org.json:json:20210307'
 }
 
 tasks.named('test') {

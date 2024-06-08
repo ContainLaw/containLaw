@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>법안 상세</title>
+</head>
+<body>
+<h1 th:text="${bill.billName}">법안 이름</h1>
+<p><strong>법안 번호:</strong> <span th:text="${bill.billNo}">법안 번호</span></p>
+<p><strong>요약:</strong> <span th:text="${bill.summary}">요약</span></p>
+<p><strong>장점:</strong> <span th:text="${bill.advantages}">장점</span></p>
+<p><strong>단점:</strong> <span th:text="${bill.disadvantages}">단점</span></p>
+<p><strong>발의자:</strong> <span th:text="${bill.proposer}">발의자</span></p>
+<p><strong>위원회:</strong> <span th:text="${bill.committee}">위원회</span></p>
+<p><strong>제안일:</strong> <span th:text="${bill.proposeDate}">제안일</span></p>
+<p><strong>의결일:</strong> <span th:text="${bill.procDate}">의결일</span></p>
+<p><strong>처리 결과 코드:</strong> <span th:text="${bill.procResultCode}">처리 결과 코드</span></p>
+<p><strong>관련 URL:</strong> <a th:href="${bill.url}" th:text="${bill.url}">관련 URL</a></p>
+
+<h2>제안자</h2>
+<ul>
+    <li th:if="${bill.proposer != null}" th:each="profile : ${profiles}">
+        <strong>이름:</strong>
+        <span th:if="${profile.name != null}" th:text="${profile.name}">이름</span>
+    </li>
+    <li th:unless="${bill.proposer != null}">
+       <span th:text="'발의자와 동일합니다.'">발의자와 동일합니다.</span>
+    </li>
+</ul>
+
+<a href="/" th:text="'홈으로 돌아가기'">홈으로 돌아가기</a>
+</body>
+</html>

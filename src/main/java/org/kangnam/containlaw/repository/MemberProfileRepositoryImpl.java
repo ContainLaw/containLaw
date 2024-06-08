@@ -5,8 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface MemberProfileRepository extends JpaRepository<MemberProfile, Long> {
+public interface MemberProfileRepositoryImpl extends JpaRepository<MemberProfile, Long> {
+    List<MemberProfile> findByName(String name);
     List<MemberProfile> findByNameContaining(String name);
+    List<MemberProfile> findByPartyNameContaining (String partyName);
+    List<MemberProfile> findByDistrictContaining (String district);
 }

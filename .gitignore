@@ -19,7 +19,6 @@
 .idea/**/contentModel.xml
 
 # Sensitive or high-churn files
-.idea/**/dataSources/
 .idea/**/dataSources.ids
 .idea/**/dataSources.local.xml
 .idea/**/sqlDataSources.xml
@@ -56,9 +55,6 @@ cmake-build-*/
 # IntelliJ
 out/
 config.properties
-
-# mpeltonen/sbt-idea plugin
-.idea_modules/
 
 # JIRA plugin
 atlassian-ide-plugin.xml
@@ -195,7 +191,5 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,gradle,java,intellij
-
-config.properties
-
-config.properties
+src/main/resources/config.properties
+src/main/resources/application.properties
