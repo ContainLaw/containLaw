@@ -23,7 +23,7 @@ public class ScheduledService {
     private BillService billService;
     private static final Logger logger = LoggerFactory.getLogger(LsmLegService.class);
 
-    @Scheduled(fixedRate = 100000)
+    @Scheduled(cron = "0 0 18 * * *")
     public void autoUpdateNewLsmLeg() throws IOException, InterruptedException {
         List<LsmLegRes.LsmLeg> lsmLegList = getLsmLegState("3");
         if (lsmLegList != null) {
