@@ -26,6 +26,8 @@
 이 페이지는 입법 과정과 국회의원 활동을 쉽게 이해하고 추적할 수 있도록 하여, 
 국민들이 보다 정확하고 깊이 있는 정보를 바탕으로 현명한 선택을 할 수 있도록 돕고자 합니다.
 
+<img src="https://github.com/ContainLaw/containLaw/blob/main/intro.jpg?raw=true"/>
+
 <hr/><br>
 
 ## ⚒️기능소개
