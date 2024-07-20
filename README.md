@@ -55,7 +55,6 @@
 ### 🌐 Frontend
 
 ![Thymleaf](https://img.shields.io/badge/Thymeleaf-005F0F?style=for-the-badge&logo=Thymeleaf&logoColor=white)
-![Styled_Components](https://img.shields.io/badge/SCSS-CC6699?style=for-the-badge&logo=sass&logoColor=white)
 
 ### 📦 Backend
 
