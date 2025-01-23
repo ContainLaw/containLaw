@@ -9,7 +9,7 @@
 
 ## 🤝 Member
 
-|                                     김영록                                      |                                     이다은                                     |                                      이서우                                      |                                     이윤영(귀요미)                                     |
+|                                     김영록                                      |                                     이다은                                     |                                      이서우                                      |                                     이윤영                                    |
 | :-----------------------------------------------------------------------------: | :----------------------------------------------------------------------------: | :------------------------------------------------------------------------------: | :------------------------------------------------------------------------------:|
 | <img src="https://avatars.githubusercontent.com/u/95115004?v=4" width="150px"/> | <img src="https://avatars.githubusercontent.com/u/129300314?v=4" width="150px"/> | <img src="https://avatars.githubusercontent.com/u/145416041?v=4" width="150px"/> | <img src="https://avatars.githubusercontent.com/u/130331004?v=4" width="150px"/>|  
 | [@rogi-rogi](https://github.com/rogi-rogi) | [@leeda973](https://github.com/leeda973) | [@seowooda](https://github.com/seowooda) | [@lydbsdud](https://github.com/lydbsdud) |
