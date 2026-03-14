@@ -1,11 +1,11 @@
 package org.kangnam.containlaw.controller;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 import org.kangnam.containlaw.entity.Bill;
-import org.kangnam.containlaw.entity.MemberProfile;
 import org.kangnam.containlaw.service.BillService;
 import org.kangnam.containlaw.service.CategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +15,11 @@ import java.util.List;
 
 @Controller
 @RequestMapping("")
+@RequiredArgsConstructor
 public class BillController {
 
-    @Autowired
-    private BillService billService;
-
-    @Autowired
-    private CategoryService categoryService;
+    private final BillService billService;
+    private final CategoryService categoryService;
 
     private static final int MAX_RECENT_SEARCHES = 10;
 

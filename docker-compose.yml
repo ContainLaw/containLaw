@@ -1,0 +1,18 @@
+name: containLaw
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: containLaw-mysql
+    restart: unless-stopped
+    environment:
+      TZ: Asia/Seoul
+      MYSQL_DATABASE: containlaw
+      MYSQL_ROOT_PASSWORD: admin
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:

@@ -1,13 +1,13 @@
 package org.kangnam.containlaw.controller;
 
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kangnam.containlaw.Dto.BillWithCategoriesDTO;
 import org.kangnam.containlaw.entity.Bill;
 import org.kangnam.containlaw.entity.Category;
 import org.kangnam.containlaw.entity.MemberProfile;
 import org.kangnam.containlaw.service.MemberProfileService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,19 +19,11 @@ import java.util.*;
 @Slf4j
 @Controller
 @RequestMapping("")
-public class MemberProfileController implements MemberProfileControllerImpl {
+@RequiredArgsConstructor
+public class MemberProfileController {
 
-    @Autowired
-    private MemberProfileService memberProfileService;
-
-    @Autowired
-    private BillController billController;
-
-
-    @Override
-    public List<MemberProfile> getAllMemberProfiles() {
-        return List.of();
-    }
+    private final MemberProfileService memberProfileService;
+    private final BillController billController;
 
     private static final int MAX_RECENT_SEARCHES = 10;
     private List<String> recentNameSearches = new LinkedList<>();
@@ -125,11 +117,6 @@ public class MemberProfileController implements MemberProfileControllerImpl {
     public ResponseEntity<MemberProfile> addMemberProfile(@RequestBody MemberProfile memberProfile) {
         MemberProfile savedProfile = memberProfileService.saveMemberProfile(memberProfile);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedProfile);
-    }
-
-    @Override
-    public ResponseEntity<MemberProfile> updateMemberProfile(Long id, MemberProfile memberProfile) {
-        return null;
     }
 
     @PostMapping("/clearRecentSearches")
